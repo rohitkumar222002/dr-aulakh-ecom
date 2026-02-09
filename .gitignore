@@ -1,10 +1,6 @@
 /.phpunit.cache
 /node_modules
-/public/build
-/public/uploads
-/public/hot
-/public/uploads
-/public/storage
+
 /storage/*.key
 /storage/pail
 /vendor
@@ -24,7 +20,5 @@ app-28-11-2024.zip
 /.idea
 /.vscode
 /.zed
-/bootstrap
 /boostrap/cache
-/public
 /bootstrap/cache/services.php

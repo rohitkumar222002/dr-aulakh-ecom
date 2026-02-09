@@ -1,0 +1,1 @@
+[30-Nov-2024 10:03:24 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Str as Str because the name is already in use in /home/offerlooto/public_html/app/Http/Controllers/Advertiser/CategoryController.php on line 10
