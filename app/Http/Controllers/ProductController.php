@@ -28,29 +28,74 @@ class ProductController extends Controller
     }
 
     // STORE
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:subcategories,id',
-            'name' => 'required|string|max:255',
-            'short_description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'mrp' => 'nullable|numeric',
-            'discount_price' => 'nullable|numeric',
-            'stock_qty' => 'required|integer',
-            'badge' => 'nullable|in:NEW,BESTSELLER,PREMIUM,IMMUNITY',
-            'primary_image' => 'nullable',
-            'images' => 'nullable|string',
-            'is_active' => 'boolean',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'category_id' => 'nullable|exists:categories,id',
+    //         'subcategory_id' => 'nullable|exists:subcategories,id',
+    //         'name' => 'required|string|max:255',
+    //         'short_description' => 'nullable|string',
+    //         'price' => 'required|numeric',
+    //         'mrp' => 'nullable|numeric',
+    //         'discount_price' => 'nullable|numeric',
+    //         'stock_qty' => 'required|integer',
+    //         'badge' => 'nullable|in:NEW,BESTSELLER,PREMIUM,IMMUNITY',
+    //         'primary_image' => 'nullable',
+    //         'images' => 'nullable|string',
+    //         'is_active' => 'boolean',
+    //     ]);
 
-        $data['slug'] = Str::slug($data['name']);
+    //     $data['slug'] = Str::slug($data['name']);
 
-        Product::create($data);
+    //     Product::create($data);
 
-        return redirect()->route('admin.products.index')->with('success', 'Product added');
-    }
+    //     return redirect()->route('admin.products.index')->with('success', 'Product added');
+    // }
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'category_id'      => 'nullable|exists:categories,id',
+        'subcategory_id'   => 'nullable|exists:subcategories,id',
+        'name'             => 'required|string|max:255',
+        'short_description'=> 'nullable|string',
+
+        'price'            => 'required|numeric', 
+        'mrp'              => 'required|numeric', 
+        'discount_price'   => 'required|numeric',
+
+        'purchase_gst'     => 'required|numeric',
+        'sale_gst'         => 'required|numeric',
+        'distribute'       => 'required|numeric',
+
+        'stock_qty'        => 'required|integer',
+        'badge'            => 'nullable|in:NEW,BESTSELLER,PREMIUM,IMMUNITY',
+        'primary_image'    => 'nullable',
+        'images'           => 'nullable|string',
+        'is_active'        => 'boolean',
+        'profit_amount'     => 'nullable|numeric',
+    ]);
+
+    $baseSlug = Str::slug($data['name']);
+        $slug = $baseSlug;
+
+        $count = 2; 
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $count;
+            $count++;
+        }
+
+        $data['slug'] = $slug;
+
+
+   
+    
+
+    Product::create($data);
+
+    return redirect()
+        ->route('admin.products.index')
+        ->with('success', 'Product added');
+}
 
     // EDIT FORM
     public function edit(Product $product)
@@ -64,23 +109,43 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:subcategories,id',
-            'name' => 'required|string|max:255',
-            'short_description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'mrp' => 'nullable|numeric',
-            'discount_price' => 'nullable|numeric',
-            'stock_qty' => 'required|integer',
-            'badge' => 'nullable|in:NEW,BESTSELLER,PREMIUM,IMMUNITY',
-            'primary_image' => 'nullable|string',
-            'images' => 'nullable|string',
-            'is_active' => 'boolean',
-        ]);
+             'category_id'      => 'nullable|exists:categories,id',
+        'subcategory_id'   => 'nullable|exists:subcategories,id',
+        'name'             => 'required|string|max:255',
+        'short_description'=> 'nullable|string',
 
-        if ($product->name !== $data['name']) {
-            $data['slug'] = Str::slug($data['name']);
-        }
+        'price'            => 'required|numeric', 
+        'mrp'              => 'required|numeric', 
+        'discount_price'   => 'required|numeric',
+
+        'purchase_gst'     => 'required|numeric',
+        'sale_gst'         => 'required|numeric',
+        'distribute'       => 'required|numeric',
+
+        'stock_qty'        => 'required|integer',
+        'badge'            => 'nullable|in:NEW,BESTSELLER,PREMIUM,IMMUNITY',
+        'primary_image'    => 'nullable',
+        'images'           => 'nullable|string',
+        'is_active'        => 'boolean',
+        'profit_amount'     => 'nullable|numeric',
+        ]);
+            if ($product->name !== $data['name']) {
+
+                $baseSlug = Str::slug($data['name']);
+                $slug = $baseSlug;
+                $count = 2;
+
+                while (
+                    Product::where('slug', $slug)
+                        ->where('id', '!=', $product->id)
+                        ->exists()
+                ) {
+                    $slug = $baseSlug . '-' . $count;
+                    $count++;
+                }
+
+                $data['slug'] = $slug;
+            }
 
         $product->update($data);
 

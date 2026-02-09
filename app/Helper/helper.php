@@ -4,6 +4,8 @@ use Otpless\OTPLessAuth;
 use App\Models\Inc\Store;
 use App\Models\Inc\Upload;
 use App\Models\Inc\BusinessSetting;
+use App\Models\Level;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -290,6 +292,46 @@ if (!function_exists('formatUrl')) {
     //     }
     // }
     
-    
-    
+   
+if (!function_exists('distributeCommission')) {
+
+ function distributeCommission($order)
+{
+    $buyer = $order->user;
+
+    if (!$buyer) return;
+
+    $commissionPool = $order->discount_price * $order->distribute / 100;
+
+    $levels = Level::orderBy('level')->get();
+
+    $currentUser = $buyer;
+
+    foreach ($levels as $level) {
+
+        $upline = $currentUser->referrer; // sponsor relationship
+
+        if (!$upline) break;
+
+        $commissionAmount = $commissionPool * $level->percentage / 100;
+
+        Transaction::create([
+            'user_id' => $upline->id,
+            'from_user_id' => $buyer->id,
+            'level' => $level->level,
+            'amount' => $commissionAmount,
+            'trx_type' => 'credit',
+            'trx_id' => uniqid(),
+            'note' => "Level {$level->level} commission ₹" 
+          . number_format($commissionAmount, 2) 
+          . " from {$buyer->username} (Order: {$order->order_number})",
+
+        ]);
+
+        $currentUser = $upline;
+    }
+}
+
+
+}
 }

@@ -88,8 +88,10 @@ Route::group(['middleware' => ['auth:web', 'user.active'],  'as' => 'user.'], fu
     Route::get('profile', [UserController::class, 'UserProfile'])->name('profile');
     Route::put('profile', [UserController::class, 'UserProfileUpdate'])->name('profileupdate');
   
-
-
+    Route::get('direct-referrals', [UserController::class, 'directReferrals'])->name('direct.referrals');
+    Route::get('downline', [UserController::class, 'downline'])->name('downline');
+ Route::get('transactions', [UserController::class, 'Transactions'])
+    ->name('transactions');
     // AizUpload
     Route::post('/aiz-uploader', [AizUploadController::class, 'show_uploader']);
     Route::post('/aiz-uploader/upload', [AizUploadController::class, 'upload']);

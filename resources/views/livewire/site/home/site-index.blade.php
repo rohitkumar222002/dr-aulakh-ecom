@@ -10,7 +10,7 @@
     <div class="hero-slide active" style="background-image:url('hero-1.jpg')">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-title">Dr Aulakh Health Sciences™</h1>
+            <!-- <h1 class="hero-title">Dr Aulakh Health Sciences™</h1> -->
             <div class="hero-tagline">Science. Simplicity. Honest Health.</div>
 
             <div class="hero-divider"></div>
@@ -363,7 +363,7 @@
             <div class="message-quote">
                 "You don't need to consume more products to become healthy. You need to understand your body better. Once you do that, health becomes predictable."
             </div>
-            <div class="message-author">— A Message from Dr. Aulakh</div>
+            <!-- <div class="message-author">— A Message from Dr. Aulakh</div> -->
         </div>
     </section>
 

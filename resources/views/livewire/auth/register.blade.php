@@ -42,8 +42,31 @@
                     </h3>
 
                     <form wire:submit.prevent="register">
+                  
+                    <div class="mb-3">
+    <label class="form-label">Referral ID (Optional)</label>
+    <div class="input-group">
+        <span class="input-group-text">
+            <i class="fa-solid fa-user-friends"></i>
+        </span>
+         <input type="text"
+                                        class="form-control @error('referral_id') is-invalid @enderror"
+                                        placeholder="Enter Sponsor ID"
+                                        wire:model.lazy="referral_id"
+                                        wire:blur="checkSponsor"
+                                        required>
+    </div>
 
-                        <!-- NAME -->
+    @if($sponsorExists && $sponsorName)
+                                        <small class="text-success mt-1 d-block">
+                                            ✓ Valid Sponsor: {{ $sponsorName }}
+                                        </small>
+                                    @elseif($referral_id && !$sponsorExists)
+                                        <small class="text-danger mt-1 d-block">
+                                            ✗ Invalid Sponsor ID
+                                        </small>
+                                    @endif
+</div>
                         <div class="mb-3">
                             <label class="form-label">Full Name <span class="text-danger">*</span></label>
                             <div class="input-group">

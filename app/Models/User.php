@@ -19,21 +19,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'phone',
-        'phone_2',
-        'avatar',
-        'address',
-        'city',
-        'state',
-        'zip_code',
-        'status',
-        'user_pin',
-    ];
-
+   protected $guarded = [];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -57,5 +43,15 @@ class User extends Authenticatable
         ];
     }
    
+
+public function referrals()
+{
+    return $this->hasMany(User::class, 'referral_id');
+}
+
+public function parent()
+{
+    return $this->belongsTo(User::class, 'referral_id');
+}
 
 }

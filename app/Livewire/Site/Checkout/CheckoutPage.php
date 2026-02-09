@@ -215,11 +215,13 @@ public $couponError = null;
         $name = $this->guestName;
         
         $user = User::where('phone', $phone)->first();
-        
+        $username = 'THL' . str_pad(User::max('id') + 1, 4, '0', STR_PAD_LEFT);
+    
         if (!$user) {
             $user = User::create([
                 'name' => $name,
                 'phone' => $phone,
+                'username' => $username,
                 'password' => Hash::make($phone),
             ]);
             

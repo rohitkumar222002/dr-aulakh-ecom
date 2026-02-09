@@ -9,6 +9,7 @@ use App\Http\Controllers\Basic\BasicController;
 use App\Http\Controllers\Basic\SliderController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\Management\UsersManagementController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubcategoryController;
@@ -43,6 +44,7 @@ Route::group(['middleware' => ['auth:admin', 'user.active']], function () {
    Route::resource('subcategories', SubcategoryController::class);
    Route::resource('articles', ArticleController::class);
    Route::resource('coupons', CouponController::class);
+    Route::resource('levels', LevelController::class);
 
     // Users
     Route::get('/users', [UsersManagementController::class, 'tousers'])->name('users');
@@ -53,8 +55,12 @@ Route::group(['middleware' => ['auth:admin', 'user.active']], function () {
     Route::get('/universal-search', [AdminController::class, 'universalSearch'])->name('universalSearch');
     Route::get('/admin/users/{id}', [AdminController::class, 'show'])->name('admin.users.show');
 
-    
+    Route::get('transactions', [AdminController::class, 'transactions'])
+    ->name('transactions');
 
+
+Route::get('users/{user}/transactions', [AdminController::class, 'userTransactions'])
+    ->name('users.transactions');
 
     // Notifications
     Route::get('/notifications', [BasicController::class, 'Notifications'])->name('notification');

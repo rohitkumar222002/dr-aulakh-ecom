@@ -18,7 +18,11 @@ class Register extends Component
     public $password_confirmation;
     public $store;
     public $oldSessionId;
+public $referral_id;
 
+    public $sponsorExists = false;
+    public $sponsorName;
+    public $createUser = false;
     public $redirect;
 
     public function mount($redirect = null)
@@ -33,14 +37,22 @@ class Register extends Component
         'email' => 'required|email|unique:users,email',
         'phone' => 'required|unique:users,phone',
         'password' => 'required|min:3',
+    'referral_id' => 'nullable|exists:users,username',
     ]);
-
+    $referrer = null;
+    $username = 'THL' . str_pad(User::max('id') + 1, 4, '0', STR_PAD_LEFT);
+    
+    if ($this->referral_id) {
+        $referrer = User::where('username', $this->referral_id)->first();
+        }
     $oldSessionId = $this->oldSessionId;
 
     $user = User::create([
         'name' => $this->name,
         'email' => $this->email,
         'phone' => $this->phone,
+        'referral_id' => $referrer->id ?? 1,
+        'username' => $username,
         'password' => bcrypt($this->password),
     ]);
 
@@ -103,6 +115,26 @@ public function mergeCartAfterLogin($oldSessionId)
         }
     });
 }
+
+public function checkSponsor()
+    {
+        if ($this->referral_id) {
+            $user = User::where('username', $this->referral_id)->first();
+
+            if ($user) {
+                $this->sponsorExists = true;
+                $this->sponsorName = $user->name;
+                $this->createUser = true;
+            } else {
+                $this->sponsorExists = false;
+                $this->sponsorName = null;
+                $this->createUser = false;
+            }
+        } else {
+            $this->sponsorExists = false;
+            $this->createUser = false;
+        }
+    }
     public function render()
     {
         return view('livewire.auth.register');

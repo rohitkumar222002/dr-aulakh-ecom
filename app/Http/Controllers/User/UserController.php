@@ -5,6 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Models\Maid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Level;
+use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,8 +15,24 @@ class UserController extends Controller
 {
     function toUserDashboard()
     {
-        return view('user.home.dashboard');
+         $user = auth()->user();
+
+        $directCount = $user->referrals()->count();
+
+        $totalDownline = $this->countDownline($user);
+        return view('user.home.dashboard', compact('directCount', 'totalDownline'));
     }
+private function countDownline($user)
+{
+    $count = 0;
+
+    foreach ($user->referrals as $referral) {
+        $count += 1;
+        $count += $this->countDownline($referral);
+    }
+
+    return $count;
+}
 
     public function UserProfile()
     {
@@ -72,8 +91,92 @@ class UserController extends Controller
         }
         return redirect()->back()->with('error', 'E-Pin generation failed.');
     }
-        public function Maids(){
-                $maids = Maid::where('status', 1)->paginate(100);
-                return view('user.maids.index', compact('maids'));
-            }
+      
+
+            public function directReferrals()
+{
+    $user = auth()->user();
+
+    $referrals = $user->referrals()
+        ->select('id', 'name', 'username', 'email', 'created_at')
+        ->latest()
+        ->get();
+
+    return view('user.direct-referrals', compact('referrals'));
+}
+public function downline(Request $request)
+{
+    $user = auth()->user();
+
+    $selectedLevel = $request->level ?? 1;
+    $search = $request->search;
+
+    $users = $this->getDownlineByLevel($user, $selectedLevel);
+            $levels = Level::orderBy('level')->get();
+    if ($search) {
+        $users = $users->filter(function ($u) use ($search) {
+            return str_contains(strtolower($u->name), strtolower($search)) ||
+                   str_contains(strtolower($u->username), strtolower($search)) ||
+                   str_contains(strtolower($u->email), strtolower($search));
+        });
+    }
+
+    return view('user.downline', [
+        'users' => $users,
+        'selectedLevel' => $selectedLevel,
+        'levels' => $levels
+    ]);
+}
+private function getDownlineByLevel($user, $level)
+{
+    if ($level == 1) {
+        return $user->referrals;
+    }
+
+    $currentLevelUsers = collect([$user]);
+
+    for ($i = 1; $i <= $level; $i++) {
+
+        $nextLevel = collect();
+
+        foreach ($currentLevelUsers as $u) {
+            $nextLevel = $nextLevel->merge($u->referrals);
+        }
+
+        $currentLevelUsers = $nextLevel;
+    }
+
+    return $currentLevelUsers;
+}
+
+public function transactions(Request $request)
+{
+    $user = auth()->user();
+
+    $query = Transaction::where('user_id', $user->id)
+                ->latest();
+
+    // Date filter (optional)
+    if ($request->date_type) {
+
+        switch ($request->date_type) {
+
+            case 'today':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'week':
+                $query->where('created_at', '>=', Carbon::now()->subDays(7));
+                break;
+
+            case 'month':
+                $query->where('created_at', '>=', Carbon::now()->subDays(30));
+                break;
+        }
+    }
+
+    $transactions = $query->paginate(15)->appends($request->all());
+
+    return view('user.transactions', compact('transactions'));
+}
     }

@@ -31,8 +31,28 @@
                     </a>
 
                 </li>
-               
+                <li>
+                    <a href="{{ route('user.direct.referrals') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Direct Referrals</span>
+                    </a>
 
+                </li>
+               
+<li>
+                    <a href="{{ route('user.downline') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Downline</span>
+                    </a>
+
+                </li>
+                  <li>
+                    <a href="{{ route('user.transactions') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Transaction</span>
+                    </a>
+
+                </li>
                 <li>
                     <a href="{{ route('logout') }}" class="">
                         <i class="fas fa-desktop"></i>

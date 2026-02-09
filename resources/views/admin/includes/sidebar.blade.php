@@ -49,6 +49,12 @@
                         <span>Orders</span>
                     </a>
                 </li>
+                  <li>
+                    <a href="{{ route('admin.transactions') }}" class="">
+                       <i class="fas fa-exchange-alt"></i> 
+                        <span>Transaction </span>
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('admin.articles.index') }}" class="">
                         <i class="far fa-image"></i>
@@ -85,7 +91,9 @@
                                 Custom Pages
                             </a>
                         </li>
-
+<li><a href="{{ route('admin.levels.index') }}"><i
+                                    class="mdi mdi-checkbox-blank-circle align-middle"></i> Level Plan
+                            </a></li>
                         <li><a href="{{ route('admin.slider') }}"><i
                                     class="mdi mdi-checkbox-blank-circle align-middle"></i> Slider
                             </a></li>

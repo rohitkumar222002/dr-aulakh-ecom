@@ -1,7 +1,7 @@
  
   <div class="top-notice-bar">
         <div class="container">
-            <span>Dr Aulakh Health Sciences™ - Evidence-Based Metabolic Health Education</span>
+            <span>Thl Club</span>
         </div>
     </div>
  <nav class="desktop-nav">
@@ -25,23 +25,12 @@
                         </li> -->
                        
                        <li class="nav-link-item dropdown position-relative">
-    <a class="nav-link dropdown-toggle" 
-       href="{{ route('science.backed') }}">
-        Science-Backed Supplements
-    </a>
-
-   <div class="dropdown-menu p-2 shadow border-0 rounded-3">
-
-    <a class="dropdown-item d-flex align-items-center gap-2 py-2 px-3 rounded-3"
+    <a class="nav-link " 
        href="{{ route('site.products') }}">
-
-        <i class="bi bi-bag fs-6 text-secondary"></i>
-
-        <span class="fw-semibold small">Shop</span>
-
+        Products
     </a>
 
-</div>
+  
 
 </li>
     <style>
@@ -54,43 +43,10 @@
 
     </style>
 
-                        <li class="nav-link-item">
-                            <a wire:navigate href="{{ route('science.health') }}" class="nav-link">Science of Health</a>
-                        </li>
                          <!-- <li class="nav-link-item">
                             <a wire:navigate href="{{ route('doctors.desk') }}" class="nav-link">Doctor’s Desk</a>
                         </li> -->
-                        <li class="nav-link-item dropdown position-relative ">
-
-    <a class="nav-link dropdown-toggle"
-       href="{{ route('doctors.desk') }}">
-        Doctor’s Desk
-    </a>
-
-    <div class="dropdown-menu p-2 shadow border-0 rounded-3">
-
-        <a class="dropdown-item d-flex align-items-center gap-2 py-2 px-3 rounded-3"
-           href="{{ route('site.education') }}">
-            <i class="bi bi-journal-text fs-6 text-secondary"></i>
-            <span class="small fw-semibold">Articles</span>
-        </a>
-
-        <a class="dropdown-item d-flex align-items-center gap-2 py-2 px-3 rounded-3"
-           wire:navigate 
-   href="{{ route('site.faq') }}" >
-            <i class="bi bi-question-circle fs-6 text-secondary"></i>
-            <span class="small fw-semibold">FAQ</span>
-        </a>
-
-    </div>
-</li>
-<li class="nav-link-item">
-    <a wire:navigate 
-       href="{{ route('site.guided.purchase') }}" 
-       class="nav-link {{ Route::is('site.guided.purchase') ? 'active' : '' }}">
-        Guided Purchase
-    </a>
-</li>
+                        
 
                          <!-- <li class="nav-link-item">
                             <a wire:navigate href="{{ route('site.education') }}" class="nav-link {{ Route::is('site.education') ? 'active' : '' }}">Articles</a>
@@ -244,93 +200,15 @@
                                 <i class="fas fa-flask"></i>
                                 Shop & Research
                             </h4>
-                            <a href="{{ route('site.products') }}" class="submenu-link">
-                                <div class="submenu-item">
-                                    <div class="submenu-icon shop-icon">
-                                        <i class="fas fa-store"></i>
-                                    </div>
-                                    <div class="submenu-content">
-                                        <span>Shop All Products</span>
-                                        <small>Premium supplements</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="{{ route('science.backed') }}" class="submenu-link">
-                                <div class="submenu-item">
-                                    <div class="submenu-icon research-icon">
-                                        <i class="fas fa-microscope"></i>
-                                    </div>
-                                    <div class="submenu-content">
-                                        <span>Research Studies</span>
-                                    </div>
-                                </div>
-                            </a>
+                          
+                           
                         </div>
                     </div>
                 </div>
 
-                <!-- Science of Health -->
-                <a href="{{ route('science.health') }}" class="mobile-nav-link">
-                    <div class="nav-link-inner">
-                        <div class="nav-icon-badge">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
-                        <div class="nav-text">
-                            <span class="nav-title">Science of Health</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right nav-arrow"></i>
-                </a>
-
-                <!-- Doctor’s Desk -->
-                <div class="mobile-dropdown">
-                    <div class="mobile-nav-link dropdown-trigger" onclick="event.preventDefault(); event.stopImmediatePropagation(); toggleMobileDropdown(this)"
->
-                        <div class="nav-link-inner">
-                            <div class="nav-icon-badge">
-                                <i class="fas fa-user-md"></i>
-                            </div>
-                            <div class="nav-text">
-                                <span class="nav-title">Doctor's Desk</span>
-                            </div>
-                        </div>
-                        <div class="dropdown-actions">
-                            <a href="{{ route('site.education') }}" class="nav-action-btn" onclick="event.stopPropagation()">
-                                <i class="fas fa-newspaper"></i>
-                            </a>
-                            <i class="fas fa-chevron-down dropdown-arrow"></i>
-                        </div>
-                    </div>
+              
+              
                     
-                    <div class="mobile-submenu">
-                        <div class="submenu-section">
-                            <h4 class="submenu-title">
-                                <i class="fas fa-stethoscope"></i>
-                                Medical Resources
-                            </h4>
-                            <a href="{{ route('site.education') }}" class="submenu-link">
-                                <div class="submenu-item">
-                                    <div class="submenu-icon article-icon">
-                                        <i class="fas fa-file-medical-alt"></i>
-                                    </div>
-                                    <div class="submenu-content">
-                                        <span>Medical Articles</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="{{ route('site.faq') }}" class="submenu-link">
-                                <div class="submenu-item">
-                                    <div class="submenu-icon faq-icon">
-                                        <i class="fas fa-question-circle"></i>
-                                    </div>
-                                    <div class="submenu-content">
-                                        <span>FAQ Center</span>
-                                    </div>
-                                </div>
-                            </a>
-                            
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Guided Purchase -->

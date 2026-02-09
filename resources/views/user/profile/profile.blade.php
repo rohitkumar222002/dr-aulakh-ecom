@@ -69,7 +69,17 @@
 
                                 <div class="card-body">
                                     <div class="row">
+                                        
                                         <div class="col-md-6">
+                                             <div class="row mb-3">
+                                                <div class="col-sm-4">
+                                                    <p class="mb-0">Username</p>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <p class="text-muted mb-0">{{ Auth::user()->username }}</p>
+                                                </div>
+                                            </div>
+                                            <hr>
                                             <div class="row mb-3">
                                                 <div class="col-sm-4">
                                                     <p class="mb-0">Full Name</p>
@@ -79,15 +89,7 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Email</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
+                                           
                                             <div class="row mb-3">
                                                 <div class="col-sm-4">
                                                     <p class="mb-0">Phone No..</p>
@@ -151,6 +153,15 @@
                                                     <p class="text-muted mb-0">
                                                         {{ Str::mask(Auth::user()->user_pin, '*', 0, 3) }}
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                             <div class="row mb-3">
+                                                <div class="col-sm-4">
+                                                    <p class="mb-0">Email</p>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
                                                 </div>
                                             </div>
                                             <hr>

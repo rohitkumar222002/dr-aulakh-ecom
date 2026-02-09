@@ -16,7 +16,9 @@ use App\Models\Inc\BusinessSetting;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UsersExport;
+use App\Models\Level;
 use App\Models\Order;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Nette\Utils\Json;
 class AdminController extends Controller
@@ -325,102 +327,7 @@ class AdminController extends Controller
     }
 
 
-    public function AddMaid(){
-        return view('admin.maid.add-maid');
-    }
-    
-    public function AddMaidStore(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|numeric|digits_between:7,15|unique:maids,phone',
-            'gender' => 'nullable|in:male,female',
-            'age' => 'nullable|integer|min:18|max:80',
-            'experience' => 'nullable|integer|min:0|max:60',
-            'work_type' => 'nullable',
-            'availability' => 'nullable',
-            'state_id' => 'nullable|exists:states,id',
-            'city_id' => 'nullable|exists:cities,id',
-            'block_id' => 'nullable|exists:blocks,id',
-            'address' => 'nullable|string|max:1000',
-        ]);
-    
-        $maid = new Maid();
-        $maid->name = $request->name;
-        $maid->phone = $request->phone;
-        $maid->gender = $request->gender;
-        $maid->age = $request->age;
-        $maid->experience = $request->experience;
-        $maid->work_type = $request->work_type;
-        $maid->availability = $request->availability;
-        $maid->state_id = $request->state_id;
-        $maid->city_id = $request->city_id;
-        $maid->block_id = $request->block_id;
-        $maid->address = $request->address;
-    
-      
-        $maid->status = 1;
-        $maid->save();
-    
-        return redirect()->back()->with('success', 'Maid added successfully.');
-    }
-    
-        public function MaidList(){
-        $maids = Maid::paginate(10);
-        return view('admin.maid.maid-list', compact('maids'));
-        }
-
-
-        public function Maidupdate(Request $request, $id){
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'phone' => 'required|numeric|digits_between:7,15|unique:maids,phone,' . $id,
-                'gender' => 'nullable|in:male,female',
-                'age' => 'nullable|integer|min:18|max:80',
-                'experience' => 'nullable|integer|min:0|max:60',
-                'work_type' => 'nullable',
-                'availability' => 'nullable',
-                'state_id' => 'nullable|exists:states,id',
-                'city_id' => 'nullable|exists:cities,id',
-                'block_id' => 'nullable|exists:blocks,id',
-                'address' => 'nullable|string|max:1000',
-            ]);
-
-            $maid = Maid::findOrFail($id);
-            $maid->name = $request->name;
-            $maid->phone = $request->phone;
-            $maid->gender = $request->gender;
-            $maid->age = $request->age;
-            $maid->experience = $request->experience;
-            $maid->work_type = $request->work_type;
-            $maid->availability = $request->availability;
-            $maid->state_id = $request->state_id;
-            $maid->city_id = $request->city_id;
-            $maid->block_id = $request->block_id;
-            $maid->address = $request->address;
-            $maid->save();
-        return redirect()->back()->with('success', 'Maid updated successfully.');
-        }
-
-
-        public function MaidDelete($id)
-{
-    try {
-        $maid = Maid::findOrFail($id);
-        $maid->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Maid deleted successfully.'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Something went wrong!',
-            'error' => $e->getMessage()
-        ], 500);
-    }
-}
+     
 
 public function Orders(Request $request) {
     // Get all orders with search and filter
@@ -475,11 +382,30 @@ public function updateOrderStatus(Request $request, $id)
     ]);
 
     $order = Order::findOrFail($id);
-    $order->update([
-        'order_status' => $request->order_status
-    ]);
+     if ($order->order_status === 'delivered') {
+        return back()->with('error', 'Delivered order cannot be modified.');
+    }
+  
+    $oldStatus = $order->order_status;
+    $newStatus = $request->order_status;
 
-    return back()->with('success', 'Order status updated successfully');
+    $order->order_status = $newStatus;
+    $order->save();
+
+    // Commission sirf ek baar mile
+    if ($newStatus === 'delivered' && $oldStatus !== 'delivered') {
+
+        if (!$order->commission_distributed) {
+
+           distributeCommission($order);
+
+            $order->commission_distributed = 1;
+            $order->save();
+        }
+    }
+
+    return back()->with('success', 'Order status updated successfully.');
+
 }
 
 
@@ -488,4 +414,117 @@ public function viewOrder($id) {
     return view('admin.orders.order-detail', compact('order'));
 }
 
+public function transactions(Request $request)
+{
+    $query = Transaction::with(['user', 'fromUser'])
+                ->latest();
+
+    // Search filter
+    if ($request->search) {
+        $search = $request->search;
+        $query->whereHas('user', function ($q) use ($search) {
+            $q->where('name', 'like', "%$search%")
+              ->orWhere('username', 'like', "%$search%");
+        });
+    }
+
+    // Level filter
+    if ($request->level) {
+        $query->where('level', $request->level);
+    }
+
+    // Date filtering
+   if ($request->date_type) {
+
+    switch ($request->date_type) {
+
+        case 'today':
+            $query->whereDate('created_at', Carbon::today());
+            break;
+
+        case 'yesterday':
+            $query->whereDate('created_at', Carbon::yesterday());
+            break;
+
+        case 'week':
+            $query->where('created_at', '>=', Carbon::now()->subDays(7));
+            break;
+
+        case 'month':
+            $query->where('created_at', '>=', Carbon::now()->subDays(30));
+            break;
+
+        case 'custom':
+            if ($request->start_date && $request->end_date) {
+                $query->whereBetween('created_at', [
+                    Carbon::parse($request->start_date)->startOfDay(),
+                    Carbon::parse($request->end_date)->endOfDay()
+                ]);
+            }
+            break;
+    }
+}
+
+    $transactions = $query->paginate(20)->appends($request->all());
+
+                $levels=Level::orderBy('level')->get();
+    return view('admin.transactions.index', compact('transactions','levels'));
+}
+ public function userTransactions(Request $request, $userId)
+    {
+        $user = User::findOrFail($userId);
+        
+        $query = Transaction::with(['user', 'fromUser'])
+                    ->where(function($q) use ($user) {
+                        $q->where('user_id', $user->id)
+                          ->orWhere('from_user_id', $user->id);
+                    })
+                    ->latest();
+
+        // Level filter
+        if ($request->level) {
+            $query->where('level', $request->level);
+        }
+
+        // Type filter (credit/debit)
+        if ($request->type) {
+            $query->where('trx_type', $request->type);
+        }
+
+        // Date filtering
+        if ($request->date_type) {
+            $now = now();
+            
+            switch ($request->date_type) {
+                case 'today':
+                    $query->whereDate('created_at', $now->toDateString());
+                    break;
+                    
+                case 'yesterday':
+                    $query->whereDate('created_at', $now->subDay()->toDateString());
+                    break;
+                    
+                case 'week':
+                    $query->where('created_at', '>=', $now->subDays(7)->startOfDay());
+                    break;
+                    
+                case 'month':
+                    $query->where('created_at', '>=', $now->subDays(30)->startOfDay());
+                    break;
+                    
+                case 'custom':
+                    if ($request->start_date) {
+                        $query->whereDate('created_at', '>=', $request->start_date);
+                    }
+                    if ($request->end_date) {
+                        $query->whereDate('created_at', '<=', $request->end_date);
+                    }
+                    break;
+            }
+        }
+
+        $transactions = $query->paginate(20);
+
+        return view('admin.transactions.users-transactions', compact('transactions', 'user'));
+    }
 }
