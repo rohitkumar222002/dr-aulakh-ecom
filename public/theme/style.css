@@ -1,7 +1,4 @@
-:root {
-    /* --primary-color: goldenrod; */
-    --primary-color: #000000;
-}
+
 
 .card-header{
     background-color: var(--primary-color) !important;

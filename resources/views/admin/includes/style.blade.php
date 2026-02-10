@@ -14,6 +14,13 @@
 <link href="{{ asset('aizfiles/vendor.css') }}" rel="stylesheet">
 <script src="{{ asset('aizfiles/vendors.js') }}"></script>
 <link href="{{ asset('aizfiles/aiz-core.css') }}" rel="stylesheet">
+<style>
+:root {
+    /* --primary-color: goldenrod; */
+    --primary-color: {{ get_setting('site_color') }};
+}
+
+</style>
 <link href="{{ asset('theme/style.css') }}" rel="stylesheet">
 
 @stack('styles')
