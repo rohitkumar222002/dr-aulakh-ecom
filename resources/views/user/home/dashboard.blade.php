@@ -34,6 +34,24 @@
                     </div>
 
                    <div class="row">
+                     <div class="col-md-6">
+                            <div class="card text-center">
+                                <div class="card-header bg-primary">
+                                    <h4 class="card-title text-white">Referral Link</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-group mb-3">
+                                        <input type="text" id="referralLink"
+                                            class="form-control text-success text-center fw-bold"
+                                            value="{{ url('/register?referral=' . auth()->user()->username) }}" readonly />
+                                        <button class="btn btn-primary" type="button" onclick="copyReferralLink()">
+                                            Copy
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
     <div class="col-xxl-9">
         <div class="card">
             
@@ -63,12 +81,10 @@
                     <div class="col-sm-4">
                         <div class="d-flex justify-content-between align-content-end shadow-lg p-3">
                             <div>
-                                <p class="text-muted text-truncate mb-2">Last sales</p>
-                                <h5 class="mb-0">$32,695</h5>
+                                <p class="text-muted text-truncate mb-2">Balance</p>
+                                <h5 class="mb-0">{{ auth()->user()->balance }}</h5>
                             </div>
-                            <div class="text-success float-end">
-                                <i class="mdi mdi-menu-up"></i>1.8%
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -89,3 +105,16 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink');
+            referralLink.select();
+            referralLink.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(referralLink.value).then(() => {
+                alert('Referral link copied to clipboard!');
+            });
+        }
+    </script>
+@endpush

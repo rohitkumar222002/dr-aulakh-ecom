@@ -100,7 +100,7 @@ private function countDownline($user)
     $referrals = $user->referrals()
         ->select('id', 'name', 'username', 'email', 'created_at')
         ->latest()
-        ->get();
+        ->paginate(50);
 
     return view('user.direct-referrals', compact('referrals'));
 }

@@ -23,11 +23,24 @@
                 </div>
             </div>
             <ul class="left-menu list-unstyled" id="side-menu">
+<li>
+                    <a href="{{ route('user.dashboard') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Dashboard</span>
+                    </a>
 
+                </li>
                 <li>
                     <a href="{{ route('user.profile') }}">
                         <i class="fa fa-shapes"></i>
                         <span>Profile</span>
+                    </a>
+
+                </li>
+                 <li>
+                    <a href="{{ route('site.products') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Products</span>
                     </a>
 
                 </li>

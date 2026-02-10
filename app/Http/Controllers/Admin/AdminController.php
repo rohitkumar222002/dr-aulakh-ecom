@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Fund;
 use App\Models\Maid;
 use App\Models\User;
-use DB;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Location\City;
@@ -21,6 +20,8 @@ use App\Models\Order;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Nette\Utils\Json;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     function toAdminLogin()
@@ -377,35 +378,53 @@ $todayOrders = Order::whereDate('created_at', today())->count();
 
 public function updateOrderStatus(Request $request, $id)
 {
-    $request->validate([
-        'order_status' => 'required|in:pending,processing,shipped,delivered,cancelled'
-    ]);
+    try {
 
-    $order = Order::findOrFail($id);
-     if ($order->order_status === 'delivered') {
-        return back()->with('error', 'Delivered order cannot be modified.');
-    }
-  
-    $oldStatus = $order->order_status;
-    $newStatus = $request->order_status;
+        $request->validate([
+            'order_status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+        ]);
 
-    $order->order_status = $newStatus;
-    $order->save();
+        $order = Order::findOrFail($id);
 
-    // Commission sirf ek baar mile
-    if ($newStatus === 'delivered' && $oldStatus !== 'delivered') {
-
-        if (!$order->commission_distributed) {
-
-           distributeCommission($order);
-
-            $order->commission_distributed = 1;
-            $order->save();
+        if ($order->order_status === 'delivered') {
+            return back()->with('error', 'Delivered order cannot be modified.');
         }
+
+        $oldStatus = $order->order_status;
+        $newStatus = $request->order_status;
+
+        DB::transaction(function () use ($order, $newStatus, $oldStatus) {
+
+            $order->order_status = $newStatus;
+            $order->save();
+
+            if ($newStatus === 'delivered' && $oldStatus !== 'delivered') {
+
+                if (!$order->commission_distributed) {
+
+                    Log::info('Commission distribution started for Order ID: ' . $order->id);
+
+                    distributeCommission($order);
+
+                    $order->commission_distributed = 1;
+                    $order->save();
+
+                    Log::info('Commission distributed successfully.');
+                }
+            }
+        });
+
+        return back()->with('success', 'Order status updated successfully.');
+
+    } catch (\Exception $e) {
+
+        Log::error('Order Status Update Error: ' . $e->getMessage());
+        Log::error('File: ' . $e->getFile());
+        Log::error('Line: ' . $e->getLine());
+        Log::error('Trace: ' . $e->getTraceAsString());
+
+        return back()->with('error', 'Something went wrong. Check logs.');
     }
-
-    return back()->with('success', 'Order status updated successfully.');
-
 }
 
 

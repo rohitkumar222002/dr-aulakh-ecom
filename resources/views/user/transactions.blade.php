@@ -55,7 +55,8 @@
                     </td>
 
                     <td>
-                        {{ $trx->fromUser->name ?? '-' }}
+                        {{ $trx->fromUser->name ?? '-' }}<br>
+                        <b>({{ $trx->fromUser->username ?? '-' }})</b>
                     </td>
 
                     <td>

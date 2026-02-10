@@ -9,6 +9,8 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
@@ -295,43 +297,55 @@ if (!function_exists('formatUrl')) {
    
 if (!function_exists('distributeCommission')) {
 
- function distributeCommission($order)
+function distributeCommission($order)
 {
-    $buyer = $order->user;
+    DB::transaction(function () use ($order) {
 
-    if (!$buyer) return;
+        $buyer = $order->user;
+        if (!$buyer) return;
 
-    $commissionPool = $order->discount_price * $order->distribute / 100;
+        $levels = Level::orderBy('level')->get();
+        if ($levels->isEmpty()) return;
 
-    $levels = Level::orderBy('level')->get();
+        $orderItems = $order->items;
 
-    $currentUser = $buyer;
+        foreach ($orderItems as $item) {
 
-    foreach ($levels as $level) {
+            $product = $item->product;
+            if (!$product) continue;
 
-        $upline = $currentUser->referrer; // sponsor relationship
+            $commissionPool = ($product->discount_price * $product->distribute / 100) * $item->quantity;
 
-        if (!$upline) break;
+            if ($commissionPool <= 0) continue;
 
-        $commissionAmount = $commissionPool * $level->percentage / 100;
+            $currentUser = $buyer;
 
-        Transaction::create([
-            'user_id' => $upline->id,
-            'from_user_id' => $buyer->id,
-            'level' => $level->level,
-            'amount' => $commissionAmount,
-            'trx_type' => 'credit',
-            'trx_id' => uniqid(),
-            'note' => "Level {$level->level} commission ₹" 
-          . number_format($commissionAmount, 2) 
-          . " from {$buyer->username} (Order: {$order->order_number})",
+            foreach ($levels as $level) {
 
-        ]);
+                $upline = $currentUser->referrer;
+                if (!$upline) break;
 
-        $currentUser = $upline;
-    }
+                $commissionAmount = $commissionPool * $level->percentage / 100;
+
+                Transaction::create([
+                    'user_id' => $upline->id,
+                    'from_user_id' => $buyer->id,
+                    'level' => $level->level,
+                    'amount' => $commissionAmount,
+                    'trx_type' => 'credit',
+                    'trx_id' => uniqid(),
+                    'note' => "Level {$level->level} commission ₹"
+                        . number_format($commissionAmount, 2)
+                        . " from {$buyer->username} (Order: {$order->order_number})",
+                ]);
+
+                $upline->increment('balance', $commissionAmount);
+
+                $currentUser = $upline;
+            }
+        }
+    });
 }
-
 
 }
 }
