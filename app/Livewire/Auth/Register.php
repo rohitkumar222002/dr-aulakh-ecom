@@ -29,6 +29,11 @@ public $referral_id;
     {
         $this->redirect = $redirect;
         $this->oldSessionId = session()->getId();
+        $this->referral_id = request('referral') ?? '';
+
+    if ($this->referral_id) {
+        $this->checkSponsor();
+    }
     }
   public function register()
 {

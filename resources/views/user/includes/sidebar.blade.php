@@ -44,6 +44,13 @@
                     </a>
 
                 </li>
+                 <li>
+                    <a href="{{ route('orders.index') }}">
+                        <i class="fa fa-shapes"></i>
+                        <span>Orders</span>
+                    </a>
+
+                </li>
                 <li>
                     <a href="{{ route('user.direct.referrals') }}">
                         <i class="fa fa-shapes"></i>

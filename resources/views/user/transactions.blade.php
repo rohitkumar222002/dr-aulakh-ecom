@@ -39,10 +39,11 @@
                 <tr>
                     <th>#</th>
                     <th>From User</th>
-                    <th>Level</th>
+                    <!-- <th>Level</th> -->
                     <th>Amount</th>
                     <th>Tax</th>
                     <th>Type</th>
+                    <!-- <th>Notes</th> -->
                     <th>Date</th>
                 </tr>
             </thead>
@@ -53,15 +54,17 @@
                     <td>
                         {{ ($transactions->currentPage()-1)*$transactions->perPage()+$index+1 }}
                     </td>
-
-                    <td>
+ <td width="20%">
+                            {{ $trx->note }}
+                        </td>
+                    <!-- <td>
                         {{ $trx->fromUser->name ?? '-' }}<br>
                         <b>({{ $trx->fromUser->username ?? '-' }})</b>
-                    </td>
+                    </td> -->
 
-                    <td>
+                    <!-- <td>
                         Level {{ $trx->level }}
-                    </td>
+                    </td> -->
 
                     <td class="text-success">
                         ₹{{ $trx->amount }}
@@ -78,7 +81,7 @@
                             <span class="badge bg-danger">Debit</span>
                         @endif
                     </td>
-
+                       
                     <td>
                         {{ $trx->created_at->format('d M Y') }}
                     </td>
