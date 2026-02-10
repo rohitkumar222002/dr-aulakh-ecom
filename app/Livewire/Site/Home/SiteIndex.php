@@ -4,6 +4,7 @@ namespace App\Livewire\Site\Home;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Slider\Slider;
 use Livewire\Component;
 
 class SiteIndex extends Component
@@ -11,7 +12,8 @@ class SiteIndex extends Component
     public function render()
     {
         $products = Product::with('category')->latest()->take(12)->get();
-        return view('livewire.site.home.site-index', compact('products'));
+    $sliders = Slider::where('status', 1)->latest()->get();
+        return view('livewire.site.home.site-index', compact('products','sliders'));
     }
 public function addToCart($productId)
 {

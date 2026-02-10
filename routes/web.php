@@ -31,7 +31,6 @@ use App\Livewire\Site\ScienceOfHealth;
 use App\Livewire\Site\GuidedPurchase;
 use App\Livewire\Site\Faq;
 
-Route::get('/faq', Faq::class)->name('site.faq');
 Route::get('/cache_clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
@@ -39,8 +38,6 @@ Route::get('/cache_clear', function () {
     Artisan::call('route:clear');
     Artisan::call('optimize:clear');
 });
-Route::get('/guided-purchase', GuidedPurchase::class)
-    ->name('site.guided.purchase');
 Route::get('/', SiteIndex::class)->name('site.index');
 Route::get('/articles', ArticlesList::class)->name('site.education');
 Route::get('/articles/{slug}', ArticleDetail::class)->name('articles.show');
@@ -52,11 +49,8 @@ Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('register');
 Route::get('/forget-password', UserForgetPassword::class)->name('forget.password');
 Route::get('/cart', CartPage::class)->name('cart');
-Route::get('/science-backed', ScienceBacked::class)->name('science.backed');
 Route::get('/contact-us', ContactPage::class)->name('contact-us');
 
-Route::get('/science-of-health', ScienceOfHealth::class)->name('science.health');
-Route::get('/doctors-desk', DoctorsDesk::class)->name('doctors.desk');
  Route::get('/orders', OrdersPage::class)->name('orders.index');
 Route::post('/payment/create-order', [PaymentController::class, 'createOrder'])->name('payment.create-order');
 Route::post('/payment/verify', [PaymentController::class, 'verifyPayment'])->name('payment.verify');

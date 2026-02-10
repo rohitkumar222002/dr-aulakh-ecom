@@ -99,7 +99,7 @@
             position: relative;
             font-size: 0.85rem;
             font-weight: 500;
-            padding: 6px 0;     
+            /* padding: 6px 0;      */
         }
         
         .nav-link {
@@ -107,7 +107,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            padding: 8px 0;
+            /* padding: 8px 0; */
             transition: color 0.3s ease;
         }
         
@@ -511,7 +511,7 @@
 
 .hero-slider {
     position: relative;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     overflow: hidden;
 }
 
@@ -1088,7 +1088,7 @@
 }
 /* Mobile */
 @media (max-width:768px){
-    .hero-slider { min-height: 85vh; }
+    /* .hero-slider { min-height: 85vh; } */
 }
 
 /* Responsive */

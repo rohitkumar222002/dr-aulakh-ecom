@@ -1,7 +1,7 @@
  
   <div class="top-notice-bar">
         <div class="container">
-            <span>Thl Club</span>
+            <span>{{ get_setting('nav_title') }}</span>
         </div>
     </div>
  <nav class="desktop-nav">
@@ -43,14 +43,9 @@
 
     </style>
 
-                         <!-- <li class="nav-link-item">
-                            <a wire:navigate href="{{ route('doctors.desk') }}" class="nav-link">Doctor’s Desk</a>
-                        </li> -->
+                         
                         
 
-                         <!-- <li class="nav-link-item">
-                            <a wire:navigate href="{{ route('site.education') }}" class="nav-link {{ Route::is('site.education') ? 'active' : '' }}">Articles</a>
-                        </li> -->
                     </ul>
                 </div>
                 
@@ -212,17 +207,7 @@
                 </div>
 
                 <!-- Guided Purchase -->
-                <a href="{{ route('site.guided.purchase') }}" class="mobile-nav-link">
-                    <div class="nav-link-inner">
-                        <div class="nav-icon-badge">
-                            <i class="fas fa-hands-helping"></i>
-                        </div>
-                        <div class="nav-text">
-                            <span class="nav-title">Guided Purchase</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right nav-arrow"></i>
-                </a>
+               
                 <a  wire:navigate href="{{ route('login') }}" class="mobile-nav-link">
                     <div class="nav-link-inner">
                         <div class="nav-icon-badge">

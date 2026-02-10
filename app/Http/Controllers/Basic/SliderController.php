@@ -11,7 +11,7 @@ class SliderController extends Controller
 {
     public function Sliders()
     {
-        $sliders = Slider::where('user_id', Auth::id())->where('guard',current_guard())->paginate(10);
+        $sliders = Slider::where('status',1)->paginate(10);
         return view('admin.sliders.sliders', compact('sliders'));
     }
     public function SlidersStore(Request $request)
@@ -19,14 +19,12 @@ class SliderController extends Controller
         $request->validate([
             'image' => 'required',
             'status' => 'required|integer|in:0,1',
-            'link'    => 'nullable',
+            'slider_link'    => 'nullable',
         ]);
 
         $slider = new Slider();
-        $slider->user_id = Auth::id();
-        $slider->guard = current_guard();
         $slider->images = $request->image;
-        $slider->link = $request->slider_link;
+        $slider->title = $request->slider_link;
         $slider->status = $request->status;
         $slider->save();
         return redirect()->back()->with('success', 'Slider added successfully!');
@@ -41,12 +39,10 @@ class SliderController extends Controller
             'link'    => 'nullable',
         ]);
 
-        $slider = Slider::where('user_id', Auth::id())
-            ->where('guard', current_guard())
-            ->findOrFail($request->id);
+        $slider = Slider::findOrFail($request->id);
 
         $slider->images = $request->images;
-        $slider->link = $request->slider_link;
+        $slider->title = $request->slider_link;
         $slider->status = $request->status;
 
 

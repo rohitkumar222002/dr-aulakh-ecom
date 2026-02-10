@@ -12,6 +12,43 @@
             --light-gray: #f5f5f5;
             --white: #ffffff;
         }
+        .hero-section {
+    position: relative;
+    width: 100%;
+    max-height: 450px !important;
+    height: 450px !important;
+    overflow: hidden;
+}
+
+.hero-slide {
+    height: 450px !important;
+    max-height: 450px !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Overlay full cover kare */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive Control */
+@media (max-width: 768px) {
+    .hero-section,
+    .hero-slide {
+        height: 350px;
+        max-height: 350px;
+    }
+}
+
     </style>
 </head>
 

@@ -157,7 +157,30 @@
                                 </div>
                             </div>
 
-                          
+                          <div class="card">
+                                <div class="card-header card-header-bordered">
+                                    <h3 class="card-title">Nav Part</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-3">
+                                        
+   <div>
+                                            <label for="exampleFormControlInput1" class="form-label">Nav Ttile</label>
+                                            <input type="text"
+                                                value="{{ old('nav_title', get_setting('nav_title')) }}"
+                                                name="nav_title" class="form-control" id="exampleFormControlInput1"
+                                                placeholder="" />
+                                            @error('nav_title')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ ucwords($message) }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
 
 
                         </div>

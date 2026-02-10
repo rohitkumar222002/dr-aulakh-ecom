@@ -6,7 +6,7 @@
 
         <!-- Start Navbar-Brand -->
         <div class="navbar-logo-box">
-            <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
+            <a href="{{ url('/') }}" class="logo logo-dark">
                 <span class="logo-sm">
                     <img src="{{ asset('panel/images/logo-dark.png') }}" alt="logo-sm-dark" height="20">
                 </span>
@@ -38,13 +38,11 @@
 
             <div class="d-flex align-items-center gap-2">
                 <!--Start App Search-->
-               <!-- <form action="#" method="GET" class="app-search d-none d-lg-block">
-    <div class="position-relative">
-        <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
-        <span class="fab fa-sistrix fs-17 align-middle"></span>
+          <a href="{{ url('products') }}" class="app-search d-none d-lg-block text-decoration-none">
+    <i class="fa fa-box"></i>
+</a>
 
-    </div>
-</form> -->
+
 
                 <!--End App Search-->
 

@@ -19,8 +19,8 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Images((1500*350))</th>
-                                                <th>Link</th>
+                                                <th>Images(1500*450)</th>
+                                                <th>Ttile</th>
                                                 <th>Status</th>
                                                 <th>Operation</th>
                                             </tr>
@@ -36,7 +36,7 @@
                                                             width="100px!important" alt="Slider Image" class="rounded">
                                                     </td>
                                                     <td>
-                                                        {{ $slider->link }}
+                                                        {{ $slider->title }}
                                                     </td>
                                                     <td>
                                                         @if ($slider->status == 1)
@@ -97,10 +97,10 @@
 
                                                                             </div>
                                                                             <div class="mb-3">
-                                                                                <label>Link</label>
+                                                                                <label>Title</label>
                                                                                 <div class="input-group">
                                                                                     <input type="text" name="slider_link"
-                                                                                        value="{{ $slider->link }}"
+                                                                                        value="{{ $slider->title }}"
                                                                                         class="form-control">
                                                                                 </div>
                                                                             </div>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label>Link</label>
+                            <label>Title</label>
                             <div class="input-group">
                                 <input type="text" name="slider_link" value="{{ old('slider_link') }}"
                                     class="form-control">

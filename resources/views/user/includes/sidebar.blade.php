@@ -25,7 +25,7 @@
             <ul class="left-menu list-unstyled" id="side-menu">
 <li>
                     <a href="{{ route('user.dashboard') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
 
@@ -37,23 +37,23 @@
                     </a>
 
                 </li>
-                 <li>
+                 <!-- <li>
                     <a href="{{ route('site.products') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-box"></i>
                         <span>Products</span>
                     </a>
 
                 </li>
                  <li>
                     <a href="{{ route('orders.index') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-shopping-bag"></i>
                         <span>Orders</span>
                     </a>
 
-                </li>
+                </li> -->
                 <li>
                     <a href="{{ route('user.direct.referrals') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-users"></i>
                         <span>My Referrals</span>
                     </a>
 
@@ -61,14 +61,14 @@
                
 <li>
                     <a href="{{ route('user.downline') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-wallet"></i>
                         <span>My Affiliate Profit</span>
                     </a>
 
                 </li>
                   <li>
                     <a href="{{ route('user.transactions') }}">
-                        <i class="fa fa-shapes"></i>
+                        <i class="fa fa-receipt"></i>
                         <span>Transaction</span>
                     </a>
 

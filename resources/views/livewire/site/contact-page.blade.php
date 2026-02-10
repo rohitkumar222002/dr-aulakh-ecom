@@ -192,27 +192,7 @@
    
 
     <style>
-    /* Base Styles */
-    :root {
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --secondary: #7c3aed;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --text-primary: #1f2937;
-        --text-secondary: #6b7280;
-        --text-light: #9ca3af;
-        --bg-light: #f9fafb;
-        --bg-white: #ffffff;
-        --border-color: #e5e7eb;
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        --radius-sm: 0.5rem;
-        --radius-md: 0.75rem;
-        --radius-lg: 1rem;
-    }
+    
 
     .contact-page {
         min-height: 100vh;
@@ -227,9 +207,9 @@
 
     /* Hero Section */
     .contact-hero {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
         color: white;
-        padding: 5rem 0 4rem;
+        padding: 25px;
         text-align: center;
     }
 
@@ -274,7 +254,7 @@
 
     .form-header h2 {
         font-size: 2rem;
-        color: var(--text-primary);
+        color: var(--text-primary-blue);
         margin-bottom: 0.5rem;
     }
 
@@ -294,7 +274,7 @@
         display: block;
         margin-bottom: 0.5rem;
         font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-blue);
     }
 
     .form-group .input-group {
@@ -328,7 +308,7 @@
     .input-group input:focus,
     .input-group textarea:focus {
         outline: none;
-        border-color: var(--primary);
+        border-color: var(--primary-blue);
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
@@ -362,7 +342,7 @@
 
     /* Submit Button */
     .submit-btn {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue));
         color: white;
         border: none;
         padding: 1rem 2rem;
@@ -406,7 +386,7 @@
     .info-card h3,
     .map-card h3 {
         font-size: 1.5rem;
-        color: var(--text-primary);
+        color: var(--text-primary-blue);
         margin-bottom: 1rem;
     }
 
@@ -437,7 +417,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--primary);
+        color: var(--primary-blue);
         font-size: 1.25rem;
         flex-shrink: 0;
     }
@@ -452,14 +432,14 @@
 
     .detail-content a,
     .detail-content p {
-        color: var(--text-primary);
+        color: var(--text-primary-blue);
         text-decoration: none;
         font-weight: 500;
         line-height: 1.5;
     }
 
     .detail-content a:hover {
-        color: var(--primary);
+        color: var(--primary-blue);
     }
 
     /* Map Card */
@@ -486,7 +466,7 @@
         align-items: center;
         gap: 0.5rem;
         background: var(--bg-light);
-        color: var(--text-primary);
+        color: var(--text-primary-blue);
         padding: 0.75rem 1.5rem;
         border-radius: var(--radius-sm);
         text-decoration: none;
@@ -497,7 +477,7 @@
     }
 
     .directions-btn:hover {
-        background: var(--primary);
+        background: var(--primary-blue);
         color: white;
         transform: translateY(-1px);
     }

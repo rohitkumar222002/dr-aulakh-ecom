@@ -1,67 +1,32 @@
 <div>
    
   <section id="heroCarousel"
-         class="carousel slide hero-section hero-slider "
+         class="carousel slide hero-section hero-slider"
          data-bs-ride="carousel"
-         data-bs-interval="180000"
-         data-bs-pause="hover">
+         data-bs-interval="5000">
 
-    <!-- SLIDE 1 -->
-    <div class="hero-slide active" style="background-image:url('hero-1.jpg')">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <!-- <h1 class="hero-title">Dr Aulakh Health Sciences™</h1> -->
-            <div class="hero-tagline">Science. Simplicity. Honest Health.</div>
+    @foreach($sliders as $key => $slider)
+   
+        <div class="hero-slide {{ $key == 0 ? 'active' : '' }}"
+             style="background-image:url({{ uploaded_asset($slider->images) }})">
 
-            <div class="hero-divider"></div>
+            <div class="hero-overlay"></div>
 
-            <p class="hero-subtitle">
-                True health begins with understanding metabolism — not blindly treating numbers.
-            </p>
+            <div class="hero-content">
 
-            <div class="hero-cta">
-                <a href="#philosophy" class="btn-hero-primary">Our Philosophy</a>
+                @if($slider->title)
+                    <h1 class="hero-title">{{ $slider->title }}</h1>
+                @endif
+
+                
+
+                <!-- <div class="hero-divider"></div> -->
+
+                
+
             </div>
         </div>
-    </div>
-
-    <!-- SLIDE 2 -->
-    <div class="hero-slide" style="background-image:url('hero-2.jpg')">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">Metabolic Health Education</h1>
-            <div class="hero-tagline">Fix the root. Not the symptoms.</div>
-
-            <div class="hero-divider"></div>
-
-            <p class="hero-subtitle">
-                Insulin resistance, diabetes reversal, and lifestyle-driven disease — explained simply.
-            </p>
-
-            <div class="hero-cta">
-                <a href="#resources" class="btn-hero-primary">Explore Resources</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- SLIDE 3 -->
-    <div class="hero-slide" style="background-image:url('hero-3.jpg')">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">Evidence-Based Products</h1>
-            <div class="hero-tagline">Support health. Don’t replace lifestyle.</div>
-
-            <div class="hero-divider"></div>
-
-            <p class="hero-subtitle">
-                Clean, transparent nutritional support — no hype, no dependency.
-            </p>
-
-            <div class="hero-cta">
-                <a href="#products" class="btn-hero-primary">View Products</a>
-            </div>
-        </div>
-    </div>
+    @endforeach
 
 </section>
 

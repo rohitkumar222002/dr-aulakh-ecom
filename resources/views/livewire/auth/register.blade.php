@@ -54,7 +54,7 @@
                                         placeholder="Enter Sponsor ID"
                                         wire:model.lazy="referral_id"
                                         wire:blur="checkSponsor"
-                                        required>
+                                        >
     </div>
 
     @if($sponsorExists && $sponsorName)
