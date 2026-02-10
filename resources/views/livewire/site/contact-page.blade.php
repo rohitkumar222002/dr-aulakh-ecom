@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="detail-content">
                                     <h4>Phone</h4>
-                                    <a href="tel:+919876543210">+91 98765 43210</a>
+                                    <a href="tel:{{get_setting('company_phone') }}">{{ get_setting('company_phone') }}</a>
                                 </div>
                             </div>
 
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="detail-content">
                                     <h4>Email</h4>
-                                    <a href="mailto:info@yourdomain.com">info@yourdomain.com</a>
+                                    <a href="mailto:{{ get_setting('company_email') }}">{{ get_setting('company_email') }}</a>
                                 </div>
                             </div>
 
@@ -163,20 +163,12 @@
                                 </div>
                                 <div class="detail-content">
                                     <h4>Address</h4>
-                                    <p>123 Business Street,<br>Mumbai, Maharashtra 400001</p>
+                                    <p>{{ get_setting('company_address') }}</p>
                                 </div>
                             </div>
 
                             <!-- Hours -->
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="detail-content">
-                                    <h4>Business Hours</h4>
-                                    <p>Monday - Friday: 9AM - 6PM<br>Saturday: 10AM - 4PM</p>
-                                </div>
-                            </div>
+                          
                         </div>
                     </div>
 
@@ -197,30 +189,7 @@
         </div>
     </div>
 
-    <!-- FAQ Section -->
-    <div class="faq-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Frequently Asked Questions</h2>
-                <p>Quick answers to common questions</p>
-            </div>
-            <div class="faq-grid">
-                @foreach($faqs as $faq)
-                <div class="faq-item" wire:key="faq-{{ $loop->index }}">
-                    <button class="faq-question" wire:click="toggleFaq({{ $loop->index }})">
-                        <span>{{ $faq['question'] }}</span>
-                        <i class="fas fa-chevron-{{ $openFaqs[$loop->index] ? 'up' : 'down' }}"></i>
-                    </button>
-                    @if($openFaqs[$loop->index])
-                    <div class="faq-answer">
-                        <p>{{ $faq['answer'] }}</p>
-                    </div>
-                    @endif
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
+   
 
     <style>
     /* Base Styles */

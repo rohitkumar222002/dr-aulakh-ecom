@@ -20,14 +20,14 @@
                         <li class="nav-link-item">
                             <a  href="{{ route('site.index') }}" class="nav-link  {{ Route::is('site.index') ? 'active' : '' }}">Home</a>
                         </li>
-                        <!-- <li class="nav-link-item">
+                         <li class="nav-link-item">
                             <a  href="{{ route('site.products') }}" class="nav-link {{ request()->routeIs('site.products*') ? 'active' : '' }}">Products</a>
-                        </li> -->
+                        </li>
                        
                        <li class="nav-link-item dropdown position-relative">
     <a class="nav-link " 
-       href="{{ route('site.products') }}">
-        Products
+       href="{{ route('contact-us') }}">
+        Contact Us
     </a>
 
   

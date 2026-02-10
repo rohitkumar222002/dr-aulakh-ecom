@@ -17,7 +17,7 @@ use App\Http\Controllers\Basic\BasicController;
 use App\Livewire\Site\Pages\CustomPagesComponent;
 use App\Http\Controllers\Basic\LocationController;
 use App\Http\Controllers\PaymentController;
-use App\Livewire\ContactPage;
+use App\Livewire\Site\ContactPage;
 use App\Livewire\Site\ArticleDetail;
 use App\Livewire\Site\ArticlesList;
 use App\Livewire\Site\Cart\CartPage;
@@ -53,6 +53,8 @@ Route::get('/register', Register::class)->name('register');
 Route::get('/forget-password', UserForgetPassword::class)->name('forget.password');
 Route::get('/cart', CartPage::class)->name('cart');
 Route::get('/science-backed', ScienceBacked::class)->name('science.backed');
+Route::get('/contact-us', ContactPage::class)->name('contact-us');
+
 Route::get('/science-of-health', ScienceOfHealth::class)->name('science.health');
 Route::get('/doctors-desk', DoctorsDesk::class)->name('doctors.desk');
  Route::get('/orders', OrdersPage::class)->name('orders.index');
