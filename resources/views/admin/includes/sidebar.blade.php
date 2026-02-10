@@ -92,7 +92,7 @@
                             </a>
                         </li>
 <li><a href="{{ route('admin.levels.index') }}"><i
-                                    class="mdi mdi-checkbox-blank-circle align-middle"></i> Level Plan
+                                    class="mdi mdi-checkbox-blank-circle align-middle"></i> Tier Plan
                             </a></li>
                         <li><a href="{{ route('admin.slider') }}"><i
                                     class="mdi mdi-checkbox-blank-circle align-middle"></i> Slider

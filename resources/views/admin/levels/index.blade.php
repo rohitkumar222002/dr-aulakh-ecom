@@ -8,7 +8,7 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h4>Level Plan</h4>
+            <h4>Tier Plan</h4>
         </div>
 
         <div class="card-body">
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <button class="btn p-2 btn-primary w-100">Add Level</button>
+                    <button class="btn p-2 btn-primary w-100">Add Tier</button>
                 </div>
             </form>
 
@@ -43,7 +43,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Level</th>
+                        <th>Tier</th>
                         <th>Percentage</th>
                         <th>Action</th>
                     </tr>
