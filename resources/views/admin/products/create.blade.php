@@ -119,6 +119,18 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+{{-- YOUTUBE LINK --}}
+<div class="col-md-12 mt-3">
+    <label class="form-label">YouTube Video Link</label>
+    <input type="url"
+           class="form-control"
+           name="youtube_link"
+           placeholder="https://www.youtube.com/watch?v=xxxxxxx"
+           value="{{ old('youtube_link') }}">
+    @error('youtube_link')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div>
 
                                 {{-- STATUS --}}
                                 <div class="col-md-12">
@@ -148,7 +160,7 @@
                                 <div class="row">
                                     {{-- PRICE --}}
                                     <div class="col-md-6 mt-3">
-                                        <label class="form-label">Price <span class="text-danger">*</span></label>
+                                        <label class="form-label">Mrp Price <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="price" id="price" value="{{ old('price') }}" step="0.01">
                                         @error('price')
                                             <span class="text-danger">{{ $message }}</span>
@@ -190,6 +202,7 @@
                                         @error('discount_price')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
+                                        <small id="margin_amount" class="text-primary fw-bold"></small>
                                     </div>
 
                                     {{-- SALE GST --}}
@@ -251,7 +264,6 @@
 
 @push('scripts')
     <script src="{{ asset('panel/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -327,32 +339,28 @@
                 calculateProfit();
             });
 
-            function calculateProfit() {
-                const salePrice = parseFloat($('#discount_price').val()) || 0;
-                const saleGst = parseFloat($('#sale_gst').val()) || 0;
-                const distributePercentage = parseFloat($('#distribute').val()) || 0;
+        function calculateProfit() {
+    const salePrice = parseFloat($('#discount_price').val()) || 0;
+    const saleGst = parseFloat($('#sale_gst').val()) || 0;
+    const distributePercentage = parseFloat($('#distribute').val()) || 0;
+    const netCost = parseFloat($('#net_cost').val()) || 0;
 
-                // Calculate sale GST amount
-                const saleGstAmount = salePrice * saleGst / 100;
-                
-                // Calculate payable GST (Sale GST - Purchase GST)
-                const payableGst = saleGstAmount - taxPurchase;
-                
-                // Calculate distribute amount
-                discountAmount = salePrice * distributePercentage / 100;
-                
-                // Calculate profit
-                const profit = salePrice - (payableGst + netCostValue + discountAmount);
+    const saleGstAmount = salePrice * saleGst / 100;
+    const payableGst = saleGstAmount - taxPurchase;
+    discountAmount = salePrice * distributePercentage / 100;
 
-                // Update fields
-                $('#payable_gst').val(payableGst.toFixed(2));
-                $('#profit_amount').val(profit.toFixed(2));
-                
-                // Show amounts
-                $('#sale_gst_amount').text(`Amount: ₹${saleGstAmount.toFixed(2)}`);
-                $('#distribute_amount').text(`Amount: ₹${discountAmount.toFixed(2)}`);
-                $('#payable_gst_note').text(`Sale GST: ₹${saleGstAmount.toFixed(2)} - Purchase GST: ₹${taxPurchase.toFixed(2)}`);
-            }
+    const profit = salePrice - (payableGst + netCost + discountAmount);
+
+    $('#payable_gst').val(payableGst.toFixed(2));
+    $('#profit_amount').val(profit.toFixed(2));
+
+    $('#sale_gst_amount').text(`Amount: ₹${saleGstAmount.toFixed(2)}`);
+    $('#distribute_amount').text(`Amount: ₹${discountAmount.toFixed(2)}`);
+    $('#payable_gst_note').text(`Sale GST: ₹${saleGstAmount.toFixed(2)} - Purchase GST: ₹${taxPurchase.toFixed(2)}`);
+
+    const margin = salePrice - netCost;
+    $('#margin_amount').text(`Margin (Sale - Net Cost): ₹${margin.toFixed(2)}`);
+}
 
             // Initialize calculations if old values exist
             if ("{{ old('mrp') }}" || "{{ old('purchase_gst') }}" || "{{ old('discount_price') }}") {

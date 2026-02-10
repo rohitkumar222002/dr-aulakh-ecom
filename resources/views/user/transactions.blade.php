@@ -39,7 +39,7 @@
                 <tr>
                     <th>#</th>
                     <th>From User</th>
-                    <!-- <th>Level</th> -->
+                    <!-- <th>Tier</th> -->
                     <th>Amount</th>
                     <th>Tax</th>
                     <th>Type</th>

@@ -73,6 +73,7 @@ public function store(Request $request)
         'images'           => 'nullable|string',
         'is_active'        => 'boolean',
         'profit_amount'     => 'nullable|numeric',
+    'youtube_link' => 'nullable|url'
     ]);
 
     $baseSlug = Str::slug($data['name']);
@@ -128,6 +129,8 @@ public function store(Request $request)
         'images'           => 'nullable|string',
         'is_active'        => 'boolean',
         'profit_amount'     => 'nullable|numeric',
+    'youtube_link' => 'nullable|url'
+
         ]);
             if ($product->name !== $data['name']) {
 

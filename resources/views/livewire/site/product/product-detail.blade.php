@@ -383,6 +383,24 @@
                         </div>
                     @endif
                 </div>
+              @if($product->youtube_link)
+@php
+    $embedUrl = $product->youtube_link;
+
+    $embedUrl = preg_replace('/watch\?v=/', 'embed/', $embedUrl);
+
+    $embedUrl = preg_replace('/&.*$/', '', $embedUrl);
+@endphp
+
+<iframe width="100%" height="315"
+    src="{{ $embedUrl }}"
+    frameborder="0"
+    allowfullscreen>
+</iframe>
+@endif
+
+
+
             </div>
 
 

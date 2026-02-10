@@ -12,7 +12,7 @@
                         <div class="card">
 
                             <div class="card-header card-header-bordered justify-content-between">
-                                <h3 class="card-title">My Direct Referrals</h3>
+                                <h3 class="card-title">My  Referrals</h3>
                                 <a href="{{ route('user.dashboard') }}" class="btn btn-dark text-white">
                                     Back to Dashboard
                                 </a>

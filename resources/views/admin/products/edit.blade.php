@@ -159,7 +159,17 @@
                                         <label>Short Description</label>
                                         <textarea name="short_description" rows="4" class="form-control">{{ $product->short_description }}</textarea>
                                     </div>
-
+<div class="col-md-12 mt-3">
+    <label class="form-label">YouTube Video Link</label>
+    <input type="url"
+           class="form-control"
+           name="youtube_link"
+           placeholder="https://www.youtube.com/watch?v=xxxxxxx"
+           value="{{ old('youtube_link',$product->youtube_link) }}">
+    @error('youtube_link')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div>
                                     
                             </div>
                         </div>

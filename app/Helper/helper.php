@@ -334,7 +334,7 @@ function distributeCommission($order)
                     'amount' => $commissionAmount,
                     'trx_type' => 'credit',
                     'trx_id' => uniqid(),
-                    'note' => "Level {$level->level} commission ₹"
+                    'note' => "Tier {$level->level} commission ₹"
                         . number_format($commissionAmount, 2)
                         . " from {$buyer->username} (Order: {$order->order_number})",
                 ]);
@@ -348,4 +348,13 @@ function distributeCommission($order)
 }
 
 }
+
+function getYoutubeEmbedUrl($url)
+{
+    parse_str(parse_url($url, PHP_URL_QUERY), $query);
+    return isset($query['v']) 
+        ? 'https://www.youtube.com/embed/' . $query['v']
+        : null;
+}
+
 }

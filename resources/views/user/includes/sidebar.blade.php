@@ -54,7 +54,7 @@
                 <li>
                     <a href="{{ route('user.direct.referrals') }}">
                         <i class="fa fa-shapes"></i>
-                        <span>Direct Referrals</span>
+                        <span>My Referrals</span>
                     </a>
 
                 </li>
@@ -62,7 +62,7 @@
 <li>
                     <a href="{{ route('user.downline') }}">
                         <i class="fa fa-shapes"></i>
-                        <span>Downline</span>
+                        <span>My Affiliate Profit</span>
                     </a>
 
                 </li>

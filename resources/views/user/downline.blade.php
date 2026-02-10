@@ -11,13 +11,13 @@
 <div class="row">
     <div class="col-md-4">
           <div class="card-header d-flex justify-content-between">
-        <h4>Total Level</h4>
+        <h4>Total Tier</h4>
     </div>
 
     <div class="card-body">
         <table class="table table-bordered">
             <tr>
-                <td>Level</td>
+                <td>Tier</td>
                 <td>Percentage(%)</td>
             </tr>
 @foreach ($levels as $level)
@@ -36,7 +36,7 @@
     </div>
     <div class="col-md-8">
     <div class="card-header d-flex justify-content-between">
-        <h4>Total Downline</h4>
+        <h4>Total Tier</h4>
     </div>
 
     <div class="card-body">
@@ -50,7 +50,7 @@
                         
                         <option value="{{ $i->level }}"
                             {{ $selectedLevel == $i->level ? 'selected' : '' }}>
-                            Level {{ $i->level }}
+                            Tier {{ $i->level }}
                         </option>
                     @endforeach
                 </select>

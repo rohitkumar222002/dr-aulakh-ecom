@@ -158,6 +158,25 @@
             </ul>
         </div>
     </div>
+  @php
+    $embedUrl = getYoutubeEmbedUrl($product->youtube_link);
+@endphp
+
+@if ($embedUrl)
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <iframe width="100%" height="315"
+    src="{{ $embedUrl }}"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+</iframe>
+        </div>
+    </div>
+</div>
+@endif
 
     <!-- Latest Products Section -->
     <section class="latest-products">

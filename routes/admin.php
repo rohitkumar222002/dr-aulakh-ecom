@@ -33,7 +33,7 @@ Route::get('/run-migrations', function () {
 // });
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/login', [AdminController::class, 'toAdminLogin'])->name('login');
+    Route::get('/', [AdminController::class, 'toAdminLogin'])->name('login');
 });
 
 Route::group(['middleware' => ['auth:admin', 'user.active']], function () {
