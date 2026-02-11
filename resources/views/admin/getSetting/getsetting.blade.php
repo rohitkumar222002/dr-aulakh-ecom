@@ -159,7 +159,7 @@
 
                           <div class="card">
                                 <div class="card-header card-header-bordered">
-                                    <h3 class="card-title">Nav Part</h3>
+                                    <h3 class="card-title">Home Part</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-grid gap-3">
@@ -177,7 +177,40 @@
                                             @enderror
                                         </div>
 
+ <div class="form-group">
+                                            <label for="signinSrEmail">About Image </label>
 
+                                            <div class="input-group" data-toggle="aizuploader" data-type="image"
+                                                data-multiple="false">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">
+                                                        Browse
+                                                    </div>
+                                                </div>
+                                                <div class="form-control file-amount">Choose File</div>
+                                                <input type="hidden" name="about_image"
+                                                    value="{{ old('about_image', get_setting('about_image')) }}"
+                                                    class="selected-files">
+                                            </div>
+                                            <div class="file-preview box sm">
+
+                                            </div>
+                                            @error('about_image')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ ucwords($message) }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                         <div class="col-md-12">
+                                        <label for="blockName" class="form-label">About  Description<span
+                                                class="text-danger">*</span></label>
+
+                                        <textarea id="basic-example" name="about_description" class="form-control">{{ old('about_description',get_setting('about_description')) }}</textarea>
+
+                                        @error('page_desc')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -263,6 +296,19 @@
                                         </div>
 
                                     </div>
+                                    <div>
+                                            <label for="exampleFormControlInput1" class="form-label">Footer Content</label>
+                                            <input type="text"
+                                                value="{{ old('footer_about', get_setting('footer_about')) }}"
+                                                name="footer_about" class="form-control" id="exampleFormControlInput1"
+                                                placeholder="" />
+                                            @error('footer_about')
+                                                <span class="text-danger" role="alert">
+                                                    <strong>{{ ucwords($message) }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
                                 </div>
                             </div>
                               <div class="card">
@@ -333,3 +379,25 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('panel/libs/tinymce/tinymce.min.js') }}"></script>
+
+    <script>
+        if ($("#basic-example").length > 0) {
+            tinymce.init({
+                selector: 'textarea#basic-example',
+                height: 400,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                    'bold italic backcolor | alignleft aligncenter ' +
+                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                    'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+            });
+        }
+    </script>
+    @endpush

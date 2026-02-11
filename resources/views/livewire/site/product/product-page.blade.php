@@ -170,28 +170,36 @@
 
                                 <!-- Product Image -->
                                 <div class="product-image-container">
-                                    @if($product->primary_image)
-                                        <img src="{{ uploaded_asset($product->primary_image) }}" 
-                                             alt="{{ $product->name }}" 
-                                             class="product-image">
-                                    @elseif($product->images && $product->images->count() > 0)
-                                        <img src="{{ uploaded_asset($product->images->first()->image) }}" 
-                                             alt="{{ $product->name }}" 
-                                             class="product-image">
-                                    @else
-                                        <img src="{{ asset('images/default-product.png') }}" 
-                                             alt="{{ $product->name }}" 
-                                             class="product-image">
-                                    @endif
+                                 @php
+    $imageIds = $product->images ? explode(',', $product->images) : [];
+@endphp
+
+@if($product->primary_image)
+    <img src="{{ uploaded_asset($product->primary_image) }}" 
+         alt="{{ $product->name }}" 
+         class="product-image">
+
+@elseif(!empty($imageIds))
+    <img src="{{ uploaded_asset(trim($imageIds[0])) }}" 
+         alt="{{ $product->name }}" 
+         class="product-image">
+
+@else
+    <img src="{{ asset('images/default-product.png') }}" 
+         alt="{{ $product->name }}" 
+         class="product-image">
+@endif
+
                                 </div>
 
                                 <!-- Product Info -->
                                 <div class="product-info">
                                     <h3 class="product-title">{{ $product->name }}</h3>
-                                    
+                                    @if($product->short_description)
                                     <p class="product-description">
                                         {{ $product->short_description ?: Str::limit(strip_tags($product->description), 100) }}
                                     </p>
+                                    @endif
 
                                     <div class="product-categories">
                                         @if($product->category)

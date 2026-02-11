@@ -22,19 +22,29 @@
         <!-- LEFT: Images -->
         <div class="product-gallery">
             <!-- Main Image -->
-            @if($selectedImage)
-                <img src="{{ uploaded_asset($selectedImage) }}" 
-                     class="main-image" 
-                     alt="{{ $product->name }}">
-            @elseif($product->images && $product->images->count() > 0)
-                <img src="{{ uploaded_asset($product->images->first()->image) }}" 
-                     class="main-image" 
-                     alt="{{ $product->name }}">
-            @else
-                <img src="{{ asset('images/default-product.png') }}" 
-                     class="main-image" 
-                     alt="{{ $product->name }}">
-            @endif
+          
+    {{-- MAIN IMAGE --}}
+    @php
+        $imageIds = $product->images ? explode(',', $product->images) : [];
+    @endphp
+
+    @if($selectedImage)
+        <img src="{{ uploaded_asset($selectedImage) }}" 
+             class="main-image" 
+             alt="{{ $product->name }}">
+    @elseif($product->primary_image)
+        <img src="{{ uploaded_asset($product->primary_image) }}" 
+             class="main-image" 
+             alt="{{ $product->name }}">
+    @elseif(!empty($imageIds))
+        <img src="{{ uploaded_asset(trim($imageIds[0])) }}" 
+             class="main-image" 
+             alt="{{ $product->name }}">
+    @else
+        <img src="{{ asset('images/default-product.png') }}" 
+             class="main-image" 
+             alt="{{ $product->name }}">
+    @endif
 
             <!-- Thumbnail Images -->
             <div class="thumbs">
@@ -47,14 +57,19 @@
                 @endif
                 
                 <!-- Other Images -->
-                @if($product->images && $product->images->count() > 0)
-                    @foreach($product->images as $image)
-                        <img src="{{ uploaded_asset($image->image) }}" 
-                             class="thumb {{ $selectedImage == $image->image ? 'active' : '' }}"
-                             wire:click="selectImage('{{ $image->image }}')"
-                             alt="Thumbnail">
-                    @endforeach
-                @endif
+              @if($product->images)
+    @php
+        $imageIds = explode(',', $product->images);
+    @endphp
+
+    @foreach($imageIds as $imageId)
+        <img src="{{ uploaded_asset(trim($imageId)) }}" 
+             class="thumb {{ $selectedImage == trim($imageId) ? 'active' : '' }}"
+             wire:click="selectImage('{{ trim($imageId) }}')"
+             alt="Thumbnail">
+    @endforeach
+@endif
+
             </div>
         </div>
 

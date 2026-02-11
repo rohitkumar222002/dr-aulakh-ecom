@@ -32,11 +32,9 @@
 
 <section class="content-section philosophy-section" id="philosophy">
     <div class="section-header">
-        <h2 class="section-title">Our Philosophy</h2>
+        <h2 class="section-title">About Us</h2>
         <div class="section-divider"></div>
-        <p class="section-description">
-            Understanding the root cause of health issues for sustainable wellness
-        </p>
+        
     </div>
 
     <div class="philosophy-wrapper">
@@ -47,14 +45,7 @@
             </p> -->
 
             <div class="philosophy-list">
-                <h4>Most modern lifestyle diseases share a common root: metabolic dysfunction</h4>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Type 2 diabetes</li>
-                    <li><i class="fas fa-check-circle"></i> Fatty liver</li>
-                    <li><i class="fas fa-check-circle"></i> Obesity</li>
-                    <li><i class="fas fa-check-circle"></i> High blood pressure</li>
-                    <li><i class="fas fa-check-circle"></i> Hormonal imbalance</li>
-                </ul>
+              {!! get_setting('about_description') !!}
             </div>
 <!-- 
             <p class="philosophy-text">
@@ -65,7 +56,7 @@
 
         <!-- RIGHT: IMAGE -->
         <div class="philosophy-image">
-            <img src="{{ asset('site/assets/img/philosophy.jpg')}}" alt="Metabolic Health Concept">
+            <img src="{{ uploaded_asset(get_setting('about_image'))}}" alt="Metabolic Health Concept">
         </div>
     </div>
 </section>

@@ -44,10 +44,9 @@
 
 
 </style>
-                <div class="footer-tagline">Science. Simplicity. Honest Health.</div>
+                <!-- <div class="footer-tagline">Science. Simplicity. Honest Health.</div> -->
                 <p class="footer-description">
-                    Evidence-based health education focusing on metabolic health, diabetes reversal, 
-                    and nutritional science. Empowering individuals through understanding.
+                    {{get_setting('footer_about')}}
                 </p>
                 <div class="social-links">
                         @if (get_setting('youtube_link'))
@@ -83,7 +82,7 @@
             </div>
             
             <div class="footer-column">
-                <h4>Educational Topics</h4>
+                <h4>Category</h4>
                 <ul class="footer-links">
                     <li><a href="#">Metabolic Health</a></li>
                     <li><a href="#">Insulin Resistance</a></li>
