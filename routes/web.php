@@ -17,6 +17,8 @@ use App\Http\Controllers\Basic\BasicController;
 use App\Livewire\Site\Pages\CustomPagesComponent;
 use App\Http\Controllers\Basic\LocationController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\user\CartController;
+use App\Http\Controllers\User\CheckoutController;
 use App\Livewire\Site\ContactPage;
 use App\Livewire\Site\ArticleDetail;
 use App\Livewire\Site\ArticlesList;
@@ -60,13 +62,6 @@ Route::get('/page/{slug}', CustomPagesComponent::class)->name('custom.pages');
 Route::get('/thank-you', Thankyou::class)->name('thankyou');
 Route::get('/404', Error::class)->name('error');
 
-// Ajax
-Route::get('/get-cities/{stateId}', [LocationController::class, 'getCities']);
-Route::get('/get-blocks/{cityId}', [LocationController::class, 'getBlocks']);
-Route::get('/products/filter', [LocationController::class, 'filter'])->name('products.filter');
-Route::get('/products/cities', [LocationController::class, 'getCitiesByState'])->name('products.getCitiesByState');
-Route::get('/products/blocks', [LocationController::class, 'getBlocksByCity'])->name('products.getBlocksByCity');
-
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', [BasicController::class, 'toLogout'])->name('logout');
 });
@@ -83,7 +78,23 @@ Route::group(['middleware' => ['auth:web', 'user.active'],  'as' => 'user.'], fu
     Route::get('/dashboard', [UserController::class, 'toUserDashboard'])->name('dashboard');
     Route::get('profile', [UserController::class, 'UserProfile'])->name('profile');
     Route::put('profile', [UserController::class, 'UserProfileUpdate'])->name('profileupdate');
-  
+    Route::get('user/orders', [UserController::class, 'orders'])->name('orders');
+    Route::get('user/products', [UserController::class, 'Products'])->name('product');
+    Route::post('/cart/add', [UserController::class, 'addCart'])->name('cart.add');
+    Route::get('/cart/validate', [CartController::class, 'validateCart']);
+
+    Route::get('user/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/coupon/apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+    // Checkout routes
+    Route::get('user/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/place', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+    // Checkout route
+    Route::get('/invoice/{id}', [UserController::class, 'downloadInvoice'])
+         ->name('invoice.download');
+    Route::get('user/order/{id}', [UserController::class, 'Ordershow'])->name('order.success');
     Route::get('direct-referrals', [UserController::class, 'directReferrals'])->name('direct.referrals');
     Route::get('downline', [UserController::class, 'downline'])->name('downline');
  Route::get('transactions', [UserController::class, 'Transactions'])

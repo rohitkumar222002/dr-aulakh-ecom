@@ -67,36 +67,58 @@
                                 aria-expanded="false">
                             <i class="far fa-user"></i>
                         </button>
+<ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-2 rounded-3 user-dropdown">
 
-                        <ul class="dropdown-menu dropdown-menu-end">
+    @if (Auth::guard('admin')->check())
+        <li>
+            <a class="dropdown-item d-flex align-items-center py-2"
+               href="{{ route('admin.dashboard') }}">
+                <i class="fas fa-user-shield me-2 text-primary"></i>
+                <span>Admin Dashboard</span>
+            </a>
+        </li>
 
-                            @if (Auth::guard('admin')->check())
-                                <li>
-                                    <a class="dropdown-item" target="_blank" href="{{ route('admin.dashboard') }}">
-                                        Admin Dashboard
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" target="_blank" href="{{ route('logout') }}">
-                                        Logout
-                                    </a>
-                                </li>
-                            @endif
+        <li>
+            <a class="dropdown-item d-flex align-items-center py-2"
+               href="{{ route('logout') }}">
+                <i class="fas fa-sign-out-alt me-2 text-danger"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    @endif
 
-                            @if (Auth::guard('web')->check())
-                                <li>
-                                    <a class="dropdown-item" target="_blank" href="{{ route('user.dashboard') }}">
-                                        User Dashboard
-                                    </a>
-                                </li>
-                                <li>
-                                    <a wire:navigate class="dropdown-item"  href="{{ route('orders.index') }}">
-                                        Orders
-                                    </a>
-                                </li>
-                            @endif
 
-                        </ul>
+    @if (Auth::guard('web')->check())
+        <li>
+            <a class="dropdown-item d-flex align-items-center py-2"
+               href="{{ route('user.dashboard') }}">
+                <i class="fas fa-user me-2 text-success"></i>
+                <span>User Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a wire:navigate
+               class="dropdown-item d-flex align-items-center py-2"
+               href="{{ route('orders.index') }}">
+                <i class="fas fa-box-open me-2 text-warning"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        <li>
+            <a class="dropdown-item d-flex align-items-center py-2"
+               href="{{ route('logout') }}">
+                <i class="fas fa-sign-out-alt me-2 text-danger"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    @endif
+
+</ul>
+
                     </div>
 @endif
                       <livewire:site.cart.cart-badge />

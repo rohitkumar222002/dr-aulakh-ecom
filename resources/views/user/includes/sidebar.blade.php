@@ -37,20 +37,27 @@
                     </a>
 
                 </li>
-                 <!-- <li>
-                    <a href="{{ route('site.products') }}">
+                 <li>
+                    <a href="{{ route('user.product') }}">
                         <i class="fa fa-box"></i>
                         <span>Products</span>
                     </a>
 
                 </li>
+                <li>
+                    <a href="{{ route('user.cart.index') }}">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>Cart</span>
+                    </a>
+
+                </li>
                  <li>
-                    <a href="{{ route('orders.index') }}">
+                    <a href="{{ route('user.orders') }}">
                         <i class="fa fa-shopping-bag"></i>
                         <span>Orders</span>
                     </a>
 
-                </li> -->
+                </li> 
                 <li>
                     <a href="{{ route('user.direct.referrals') }}">
                         <i class="fa fa-users"></i>

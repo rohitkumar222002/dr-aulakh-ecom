@@ -5,8 +5,13 @@ namespace App\Http\Controllers\User;
 use App\Models\Maid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Level;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\Transaction;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -179,4 +184,130 @@ public function transactions(Request $request)
 
     return view('user.transactions', compact('transactions'));
 }
+
+public function orders(Request $request)
+{
+    $orders = Order::where('user_id', auth()->id())
+            ->with(['items.product'])
+            ->latest();
+        
+        // Search filter
+        if($request->has('search') && !empty($request->search)) {
+            $orders->where('order_number', 'like', '%' . $request->search . '%');
+        }
+        
+        // Status filter (if you want to add)
+        if($request->has('status') && !empty($request->status)) {
+            $orders->where('order_status', $request->status);
+        }
+        
+        $orders = $orders->paginate(10);
+        
+
+    return view('user.orders.orders', compact('orders'));
+}
+public function Ordershow($id)
+{
+    $order = Order::where('user_id', auth()->id())
+        ->with(['items.product', 'address.state', 'user'])
+        ->findOrFail($id);
+
+    return view('user.orders.show', compact('order'));
+}
+
+public function downloadInvoice($id)
+    {
+        $order = Order::with(['items.product', 'address', 'user'])
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+        
+        // Generate PDF
+        $pdf = Pdf::loadView('user.orders.invoice', compact('order'));
+        
+        // Set PDF options
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
+        
+        // OR for view in browser:
+        // return $pdf->stream('invoice-' . $order->order_number . '.pdf');
     }
+
+    public function Products(Request $request){
+
+    // Get cart count
+    if (auth()->check()) {
+        $cartCount = Cart::where('user_id', auth()->id())->sum('quantity');
+    } else {
+        $cartCount = Cart::where('session_id', session()->getId())->sum('quantity');
+    }
+    
+    // Get products
+    $products = Product::where('is_active', 1)
+        ->when($request->search, function($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })
+        ->paginate(10);
+    
+    return view('user.products.products', compact('products', 'cartCount'));
+}
+
+    public function addCart(Request $request){
+          $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'nullable|integer|min:1'
+        ]);
+
+        $productId = $request->product_id;
+        $quantity = $request->quantity ?? 1;
+
+        $product = Product::findOrFail($productId);
+
+        // Check stock
+        if ($product->stock_qty <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product is out of stock'
+            ]);
+        }
+
+        // Check if enough stock
+        if ($product->stock_qty < $quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only ' . $product->stock_qty . ' items available in stock'
+            ]);
+        }
+
+        // Get user/session identifier
+        if (auth()->check()) {
+            $identifier = ['user_id' => auth()->id()];
+        } else {
+            $sessionId = session()->getId();
+            $identifier = ['session_id' => $sessionId];
+        }
+
+        // Find or create cart item
+        $cart = Cart::firstOrCreate(
+            array_merge($identifier, ['product_id' => $productId]),
+            ['quantity' => 0]
+        );
+
+        // Update quantity
+        $cart->quantity += $quantity;
+        $cart->price_at_that_time = $product->discount_price ?? $product->price;
+        $cart->save();
+
+        // Get cart count
+        if (auth()->check()) {
+            $cartCount = Cart::where('user_id', auth()->id())->sum('quantity');
+        } else {
+            $cartCount = Cart::where('session_id', session()->getId())->sum('quantity');
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product added to cart',
+            'cart_count' => $cartCount
+        ]);
+    }
+    }
+    
