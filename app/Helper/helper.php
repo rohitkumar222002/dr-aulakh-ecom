@@ -351,10 +351,22 @@ function distributeCommission($order)
 
 function getYoutubeEmbedUrl($url)
 {
-    parse_str(parse_url($url, PHP_URL_QUERY), $query);
-    return isset($query['v']) 
-        ? 'https://www.youtube.com/embed/' . $query['v']
-        : null;
-}
+        // Handle Shorts URL
+        if (str_contains($url, 'youtube.com/shorts/')) {
+            $videoId = basename(parse_url($url, PHP_URL_PATH));
+            return $videoId ? 'https://www.youtube.com/embed/' . $videoId : null;
+        }
+
+        // Handle normal YouTube URLs
+        preg_match(
+            '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+            $url,
+            $matches
+        );
+
+        return $matches[1] ?? null
+            ? 'https://www.youtube.com/embed/' . $matches[1]
+            : null;
+    }
 
 }

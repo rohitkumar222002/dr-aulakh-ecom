@@ -67,10 +67,19 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('/logout', function () {
-    Auth::logout(); // Logs out the current user
-    request()->session()->invalidate(); // Invalidate the session
-    request()->session()->regenerateToken(); // Regenerate the CSRF token for security
-    return redirect()->route('login'); // Redirect to the login page (or any other route)
+
+    if (Auth::guard('admin')->check()) {
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login');
+    }
+
+    Auth::guard('web')->logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('login');
+
 })->name('logout');
 
 

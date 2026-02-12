@@ -142,39 +142,31 @@
 
             <!-- Highlights -->
             <ul class="pd-highlights">
-                @if($product->description)
-                    <!-- Parse highlights from description or use default -->
-                    @php
-                        $highlights = explode("\n", strip_tags($product->description));
-                        $defaultHighlights = [
-                            '✔ Clinically dosed ingredients',
-                            '✔ No added sugar', 
-                            '✔ GMP Certified',
-                            '✔ Vegetarian Capsules'
-                        ];
-                        $displayHighlights = array_slice($highlights, 0, 4);
-                        if(count($displayHighlights) < 4) {
-                            $displayHighlights = array_merge($displayHighlights, 
-                                array_slice($defaultHighlights, 0, 4 - count($displayHighlights)));
-                        }
-                    @endphp
-                    
-                    @foreach($displayHighlights as $highlight)
-                        @if(trim($highlight))
-                            <li>{{ $highlight }}</li>
-                        @endif
-                    @endforeach
-                @else
-                    <li>✔ Clinically dosed ingredients</li>
-                    <li>✔ No added sugar</li>
-                    <li>✔ GMP Certified</li>
-                    <li>✔ Vegetarian Capsules</li>
-                @endif
+                
             </ul>
         </div>
     </div>
-  @php
-    $embedUrl = getYoutubeEmbedUrl($product->youtube_link);
+               
+     @php
+    function youtubeEmbedUrl($url) {
+        // Handle Shorts URL
+        if (str_contains($url, 'youtube.com/shorts/')) {
+            $videoId = basename(parse_url($url, PHP_URL_PATH));
+            return $videoId ? 'https://www.youtube.com/embed/' . $videoId : null;
+        }
+
+        // Handle normal YouTube URLs
+        preg_match(
+            '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+            $url,
+            $matches
+        );
+
+        return $matches[1] ?? null
+            ? 'https://www.youtube.com/embed/' . $matches[1]
+            : null;
+    }
+    $embedUrl = youtubeEmbedUrl($product->youtube_link);
 @endphp
 
 @if ($embedUrl)
@@ -182,12 +174,11 @@
     <div class="row">
         <div class="col-md-12">
             <iframe width="100%" height="315"
-    src="{{ $embedUrl }}"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-</iframe>
+                src="{{ $embedUrl }}"
+                title="YouTube video player"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
         </div>
     </div>
 </div>
@@ -238,4 +229,309 @@
             @endforeach
         </div>
     </section>
+   <style>
+    /* ===== MOBILE FIRST - SEXY DESIGN ===== */
+    @media screen and (max-width: 768px) {
+        /* Reset */
+        .product-detail-container,
+        .latest-grid,
+        .pd-actions {
+            all: revert;
+        }
+
+        /* === PRODUCT PAGE - CLEAN LAYOUT === */
+        .product-detail-container {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            background: #fff;
+        }
+
+        /* === IMAGE SECTION - BOLD === */
+        .product-gallery {
+            width: 100%;
+            background: #fafafa;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+
+        /* Thumbs - Minimal */
+        .thumbs {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .thumb {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .thumb.active {
+            border-color: {{ get_setting('site_color') }} ;
+            opacity: 1;
+        }
+
+        /* === INFO SECTION - CRISP === */
+        .product-detail-info {
+            padding: 20px 0 0;
+        }
+
+        .pd-badge {
+            background: {{ get_setting('site_color') }} ;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .pd-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0 0 8px;
+            color: #1a1a1a;
+        }
+
+        /* Rating - Clean */
+        .pd-rating {
+            color: #ffb800;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .pd-rating span {
+            color: #666;
+            font-size: 14px;
+            margin-left: 6px;
+        }
+
+        /* Price - Bold */
+        .pd-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: {{ get_setting('site_color') }} ;
+            margin: 15px 0;
+        }
+
+        .pd-price .old {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+            font-weight: 400;
+            margin-left: 10px;
+        }
+
+        /* Description */
+        .pd-short-desc {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #444;
+            margin: 15px 0;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* === BUTTONS - MODERN === */
+        .pd-actions {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .btn-buy {
+            flex: 1;
+            background: {{ get_setting('site_color') }} ;
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(255,107,107,0.2);
+        }
+
+        .btn-wishlist {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            border: 1px solid #ddd;
+            background: white;
+            color: {{ get_setting('site_color') }} ;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === YOUTUBE - SLEEK === */
+        .container {
+            padding: 0 12px;
+            margin: 20px 0;
+        }
+
+        .container iframe {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* === LATEST PRODUCTS - 2 COL GRID === */
+        .latest-products {
+            padding: 20px 12px;
+            background: #f8f9fa;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 50px;
+            height: 4px;
+            background: {{ get_setting('site_color') }} ;
+            border-radius: 2px;
+        }
+
+        .latest-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .latest-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+
+        .latest-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            mix-blend-mode: multiply;
+        }
+
+        .latest-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 8px 0 4px;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .latest-card .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: {{ get_setting('site_color') }} ;
+            display: block;
+            margin: 8px 0;
+        }
+
+        .latest-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-view {
+            flex: 1;
+            background: #f1f3f5;
+            color: #495057;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-cart {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: {{ get_setting('site_color') }} ;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Breadcrumb - Simple */
+        .breadcrumb-wrap {
+            padding: 12px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: #868e96;
+        }
+
+        .breadcrumb a {
+            color: #495057;
+            text-decoration: none;
+        }
+
+        .breadcrumb .active {
+            color: {{ get_setting('site_color') }} ;
+            font-weight: 500;
+        }
+    }
+
+    /* === SMALL PHONES === */
+    @media screen and (max-width: 380px) {
+        .latest-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .pd-title {
+            font-size: 22px;
+        }
+        
+        .btn-buy {
+            padding: 14px;
+        }
+    }
+</style>
 </div>
