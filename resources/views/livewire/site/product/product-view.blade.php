@@ -84,7 +84,7 @@
             <h1 class="pd-title">{{ $product->name }}</h1>
 
             <!-- Rating -->
-            <div class="pd-rating">
+            <div class="d-none pd-rating">
                 @if($product->rating_avg > 0)
                     @php
                         $fullStars = floor($product->rating_avg);
