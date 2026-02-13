@@ -91,7 +91,10 @@ Route::group(['middleware' => ['auth:web', 'user.active'],  'as' => 'user.'], fu
     Route::get('user/products', [UserController::class, 'Products'])->name('product');
     Route::post('/cart/add', [UserController::class, 'addCart'])->name('cart.add');
     Route::get('/cart/validate', [CartController::class, 'validateCart']);
-
+ Route::put('/profile/update', [UserController::class, 'profileUpdate'])->name('profileupdate');
+    Route::post('/kyc/update', [UserController::class, 'kycUpdate'])->name('kyc.update');
+    Route::post('/password/update', [UserController::class, 'passwordUpdate'])->name('password.update');
+    Route::post('/bank/update', [UserController::class, 'bankUpdate'])->name('bank.update');
     Route::get('user/cart', [CartController::class, 'index'])->name('cart.index');
     Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');

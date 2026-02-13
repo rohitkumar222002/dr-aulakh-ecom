@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Models\Level;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\State;
 use App\Models\Transaction;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -42,45 +43,125 @@ private function countDownline($user)
     public function UserProfile()
     {
         $profile = Auth::user();
-        return view('user.profile.profile', compact('profile')); // Change to user profile view
+        $states=State::all();
+        return view('user.profile.profile', compact('profile','states')); // Change to user profile view
     }
 
-    public function UserProfileUpdate(Request $request)
+    // public function UserProfileUpdate(Request $request)
+    // {
+    //     $request->validate(
+    //         [
+    //             'full_name' => 'nullable',
+    //             'email' => 'nullable|email',
+    //             'phone' => 'required|digits:10|unique:users,phone,' . Auth::id(), // Ignore current user ID for phone uniqueness
+    //             'address' => 'nullable',
+    //             'city' => 'nullable',
+    //             'state' => 'nullable',
+    //             'country' => 'nullable',
+    //             'image' => 'nullable',
+    //             'user_pin' => 'required|min:6|max:6',
+    //         ],
+    //         [
+    //             'user_pin.required' => 'The PIN is required. Please provide a 6-digit PIN.',
+    //             'user_pin.min' => 'The PIN must be exactly 6 digits.',
+    //             'user_pin.max' => 'The PIN must not exceed 6 digits.',
+    //         ]
+    //     );
+
+    //     $user = Auth::user();
+    //     $user->name = $request->input('full_name');
+    //     $user->email = $request->input('email');
+    //     $user->phone = $request->input('phone');
+    //     $user->phone_2 = $request->input('phone_2');
+    //     $user->address = $request->input('address');
+    //     $user->city = $request->input('city');
+    //     $user->state = $request->input('state');
+    //     $user->avatar = $request->input('image');
+    //     $user->user_pin = $request->user_pin;
+    //     $user->password = Hash::make($request->user_pin);
+    //     $user->save();
+    //     return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
+    // }
+ public function profileUpdate(Request $request)
     {
-        $request->validate(
-            [
-                'full_name' => 'nullable',
-                'email' => 'nullable|email',
-                'phone' => 'required|digits:10|unique:users,phone,' . Auth::id(), // Ignore current user ID for phone uniqueness
-                'address' => 'nullable',
-                'city' => 'nullable',
-                'state' => 'nullable',
-                'country' => 'nullable',
-                'image' => 'nullable',
-                'user_pin' => 'required|min:6|max:6',
-            ],
-            [
-                'user_pin.required' => 'The PIN is required. Please provide a 6-digit PIN.',
-                'user_pin.min' => 'The PIN must be exactly 6 digits.',
-                'user_pin.max' => 'The PIN must not exceed 6 digits.',
-            ]
-        );
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email'     => 'nullable|email',
+            'phone'     => 'nullable|digits:10',
+            'dob'       => 'nullable|date',
+            'zip_code'  => 'nullable|max:10',
+        ]);
 
         $user = Auth::user();
-        $user->name = $request->input('full_name');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->phone_2 = $request->input('phone_2');
-        $user->address = $request->input('address');
-        $user->city = $request->input('city');
-        $user->state = $request->input('state');
-        $user->avatar = $request->input('image');
-        $user->user_pin = $request->user_pin;
-        $user->password = Hash::make($request->user_pin);
-        $user->save();
-        return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
+
+        $user->update([
+            'name'    => $request->full_name,
+            'email'   => $request->email,
+            'phone'   => $request->phone,
+            'dob'     => $request->dob,
+            'state'   => $request->state,
+            'city'    => $request->city,
+            'zip_code'=> $request->zip_code,
+            'address' => $request->address,
+        ]);
+
+        return back()->with('success', 'Profile updated successfully');
     }
 
+  
+
+    public function kycUpdate(Request $request)
+    {
+        $request->validate([
+            'aadhaar_number' => 'required|digits:12',
+            'pan_number'     => 'required|size:10',
+        ]);
+
+        Auth::user()->update([
+            'aadhaar_number' => $request->aadhaar_number,
+            'pan_number'     => strtoupper($request->pan_number),
+            'kyc_status'     => 'pending',
+        ]);
+
+        return back()->with('success', 'KYC submitted successfully');
+    }
+
+  
+
+    public function passwordUpdate(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+       
+
+        Auth::user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password updated');
+    }
+
+    /* ================= BANK ================= */
+
+
+    public function bankUpdate(Request $request)
+    {
+        $request->validate([
+            'bank_name'      => 'required|string',
+            'account_number' => 'required|string',
+            'ifsc_code'      => 'required|string|max:20',
+        ]);
+
+        Auth::user()->update([
+            'bank_name'      => $request->bank_name,
+            'account_number' => $request->account_number,
+            'ifsc_code'      => strtoupper($request->ifsc_code),
+        ]);
+
+        return back()->with('success', 'Bank details saved');
+    }
    
 
     function toepingenerate(Request $request)

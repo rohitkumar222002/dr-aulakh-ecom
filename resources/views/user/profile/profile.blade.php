@@ -1,318 +1,212 @@
 @extends('user.layouts.app')
+
 @section('content')
-    <div id="layout-wrapper">
-        <div class="main-content">
-            <div class="page-content">
-                <div class="container-fluid">
-                    <div class="row">
-                        @if (session('success'))
-                            <div class="alert alert-success" id="success-message">{{ session('success') }}</div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        @if (!Auth::user()->user_pin || session('forget'))
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header card-header-bordered justify-content-between">
-                                        <h3 class="card-title">Epin </h3>
+<div id="layout-wrapper">
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
 
-                                    </div>
-                                    <div class="card-body">
-                                        <form class="row g-3" action="#" method="post"
-                                            enctype="multipart/form-data">
-                                            @csrf
+                {{-- Alerts --}}
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
-                                            <div class="col-md-12">
-                                                <label for="name" class="form-label">Enter Pin (Min 6 Character)
-                                                    <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="user_pin" maxlength="6"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)"
-                                                     value="{{ old('user_pin') }}" />
-                                                @error('user_pin')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary text-white">Sumbit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="col-xl-12">
-                            <div class="card">
-
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title">Profile
-
-                                    </h4>
-                                    <!-- Edit Button on the right -->
-                                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#editActivityModal">
-                                        Edit Profile
-                                    </button>
-                                </div>
-
-
-                            </div>
-
-                            <div class="card">
-
-                                <div class="card-body">
-                                    <div class="row">
-                                        
-                                        <div class="col-md-6">
-                                             <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Username</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->username }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Full Name</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->name }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                           
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Phone No..</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->phone_2 }}</p>
-                                                </div>
-                                            </div>
-
-                                            <hr>
-
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">State</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->state }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Address</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->address }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Phone</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->phone }}</p>
-                                                </div>
-                                            </div>
-
-
-
-                                            <hr>
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">City</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->city }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-
-                                            <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Pin</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">
-                                                        {{ Str::mask(Auth::user()->user_pin, '*', 0, 3) }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                             <div class="row mb-3">
-                                                <div class="col-sm-4">
-                                                    <p class="mb-0">Email</p>
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Modal for Editing profile -->
-                                <div class="modal fade" id="editActivityModal" tabindex="-1"
-                                    aria-labelledby="editActivityModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editActivityModalLabel">Edit Profile</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Edit Profile Form -->
-                                                <form action="{{ route('user.profileupdate') }}" method="POST"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="row mb-3">
-                                                        <div class="mb-3">
-                                                            <div class="form-group">
-                                                                <label for="signinSrEmail">Select The Profile Image</label>
-                                                                <div class="input-group" data-toggle="aizuploader"
-                                                                    data-type="image" data-multiple="false">
-                                                                    <div class="input-group-prepend">
-                                                                        <div
-                                                                            class="input-group-text bg-soft-secondary font-weight-medium">
-                                                                            Browse</div>
-                                                                    </div>
-                                                                    <div class="form-control file-amount">Choose File</div>
-                                                                    <input type="hidden" name="image"
-                                                                        value="{{ old('image', $profile->avatar) }}"
-                                                                        class="selected-files">
-                                                                </div>
-                                                                <div class="file-preview box sm"></div>
-                                                            </div>
-                                                            @error('image')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <label for="full_name" class="form-label">First Name <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="text" class="form-control" id="first_name"
-                                                                name="full_name" value="{{ $profile->name }}" required>
-                                                            @error('full_name')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="email" class="form-label">Email </label>
-                                                            <input type="email" class="form-control" id="email"
-                                                                name="email" value="{{ $profile->email }}">
-                                                            @error('email')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="phone" class="form-label">Phone <span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="text" class="form-control" id="phone"
-                                                                maxlength="10"
-                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                                name="phone" value="{{ $profile->phone }}">
-                                                            @error('phone')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="phone_2" class="form-label">Mobile</label>
-                                                            <input type="text" class="form-control" id="phone_2"
-                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                                                                maxlength="10" name="phone_2"
-                                                                value="{{ $profile->phone_2 }}">
-                                                            @error('phone_2')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label for="user_pin" class="form-label">Pin (Min 6 characters)<span class="text-danger">*</span> </label>
-                                                            <input type="text" class="form-control" id="user_pin"
-                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)"
-                                                                maxlength="6"  name="user_pin"
-                                                                value="{{ $profile->user_pin }}">
-                                                            @error('user_pin')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-
-
-                                                        <div class="col-md-6">
-                                                            <label for="state" class="form-label">State</label>
-                                                            <input type="text" class="form-control" id="state"
-                                                                name="state" value="{{ $profile->state }}">
-                                                            @error('state')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="city" class="form-label">City</label>
-                                                            <input type="text" class="form-control" id="city"
-                                                                name="city" value="{{ $profile->city }}">
-                                                            @error('city')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row mb-3">
-
-                                                        <div class="col-md-12">
-                                                            <label for="address" class="form-label">Address</label>
-
-                                                            <textarea name="address" class="form-control" cols="5" rows="5">{{ $profile->address }}</textarea>
-                                                            @error('address')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-dark"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-success">Update</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end row -->
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
+                @endif
+
+                <div class="card">
+
+                    {{-- TAB HEADER --}}
+                    <div class="card-header bg-primary">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <button class="nav-link active text-white" data-bs-toggle="tab"
+                                    data-bs-target="#profileTab" type="button">Profile</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-white" data-bs-toggle="tab"
+                                    data-bs-target="#kycTab" type="button">KYC</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-white" data-bs-toggle="tab"
+                                    data-bs-target="#passwordTab" type="button">Change Password</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-white" data-bs-toggle="tab"
+                                    data-bs-target="#bankTab" type="button">Bank</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {{-- TAB BODY --}}
+                    <div class="card-body">
+                        <div class="tab-content">
+
+                            {{-- ================= PROFILE ================= --}}
+                            <div class="tab-pane fade show active" id="profileTab">
+                                <form method="POST" action="{{ route('user.profileupdate') }}">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="row g-3">
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" name="full_name"
+                                                value="{{ old('full_name', auth()->user()->name) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email"
+                                                value="{{ old('email', auth()->user()->email) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" name="phone"
+                                                value="{{ old('phone', auth()->user()->phone) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">DOB</label>
+                                            <input type="date" name="dob"
+                                                value="{{ old('dob', auth()->user()->dob) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        {{-- STATE SELECT (FIXED) --}}
+                                        <div class="col-md-4">
+                                            <label class="form-label">State</label>
+                                            <select name="state" class="form-select form-control">
+                                                <option value="">Select State</option>
+                                                @foreach($states as $state)
+                                                    <option value="{{ $state->id }}"
+                                                        {{ old('state', auth()->user()->state) == $state->id ? 'selected' : '' }}>
+                                                        {{ $state->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">City</label>
+                                            <input type="text" name="city"
+                                                value="{{ old('city', auth()->user()->city) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Zip Code</label>
+                                            <input type="text" name="zip_code"
+                                                value="{{ old('zip_code', auth()->user()->zip_code) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="form-label">Address</label>
+                                            <textarea name="address" rows="3"
+                                                class="form-control">{{ old('address', auth()->user()->address) }}</textarea>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary">Update Profile</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            {{-- ================= KYC ================= --}}
+                            <div class="tab-pane fade" id="kycTab">
+                                <form method="POST" action="{{ route('user.kyc.update') }}">
+                                    @csrf
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Aadhaar Number</label>
+                                            <input type="text" name="aadhaar_number"
+                                                value="{{ old('aadhaar_number', auth()->user()->aadhaar_number) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">PAN Number</label>
+                                            <input type="text" name="pan_number"
+                                                value="{{ old('pan_number', auth()->user()->pan_number) }}"
+                                                class="form-control">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary w-100">Submit KYC</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {{-- ================= PASSWORD ================= --}}
+                            <div class="tab-pane fade" id="passwordTab">
+                                <form method="POST" action="{{ route('user.password.update') }}">
+                                    @csrf
+                                    <div class="row g-3">
+                                       
+                                        <div class="col-md-4">
+                                            <input type="password" name="password" class="form-control"
+                                                placeholder="New Password">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="password" name="password_confirmation" class="form-control"
+                                                placeholder="Confirm Password">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary">Update Password</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {{-- ================= BANK ================= --}}
+                            <div class="tab-pane fade" id="bankTab">
+                                <form method="POST" action="{{ route('user.bank.update') }}">
+                                    @csrf
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <input type="text" name="bank_name"
+                                                value="{{ old('bank_name', auth()->user()->bank_name) }}"
+                                                class="form-control" placeholder="Bank Name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" name="account_number"
+                                                value="{{ old('account_number', auth()->user()->account_number) }}"
+                                                class="form-control" placeholder="Account Number">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" name="ifsc_code"
+                                                value="{{ old('ifsc_code', auth()->user()->ifsc_code) }}"
+                                                class="form-control" placeholder="IFSC Code">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary">Save Bank</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+</div>
+@endsection
